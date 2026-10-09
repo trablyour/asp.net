@@ -22,7 +22,8 @@
 
 Главная страница до входа в систему
 
-<img width="1143" height="550" alt="home1" src="https://github.com/user-attachments/assets/bbcbd05b-d98d-46ca-8d47-a23c6061f62d" />
+<img width="1099" height="780" alt="пипа1" src="https://github.com/user-attachments/assets/61ff57a1-6e26-4674-abbb-61fe8ac9055c" />
+
 
 
 ### Задание 2
@@ -32,7 +33,8 @@
 
 Форма входа по почте и паролю
 
-<img width="860" height="569" alt="home2" src="https://github.com/user-attachments/assets/04f37840-206d-4ddb-8fc9-727764008264" />
+<img width="887" height="561" alt="пипа2" src="https://github.com/user-attachments/assets/9ed7b6fc-bee3-4317-9585-4bc95fa2bed4" />
+
 
 
 ### Задание 3
@@ -42,7 +44,8 @@
 
 Учётная запись с ролью «Пользователь»
 
-<img width="690" height="647" alt="home3" src="https://github.com/user-attachments/assets/369a0376-da5a-4469-88a3-5c34dacb1b5c" />
+<img width="837" height="490" alt="пипа3" src="https://github.com/user-attachments/assets/e7e2b878-80c7-44a5-8dc1-1ccca1543d5a" />
+
 
 
 ### Задание 4
@@ -52,7 +55,8 @@
 
 Отказ в доступе к админ-панели для обычного пользователя, статус 403
 
-<img width="813" height="516" alt="home4" src="https://github.com/user-attachments/assets/5af6a798-3b67-4768-ad22-2eed2a0f140f" />
+
+
 
 
 ### Задание 5
@@ -62,17 +66,19 @@
 
 Главная страница админ-панели с навигацией и общей информацией
 
-<img width="1024" height="749" alt="home5" src="https://github.com/user-attachments/assets/fd3fd153-cd3f-4099-a5d8-6fb3a44b11a9" />
+<img width="1110" height="871" alt="пипа5" src="https://github.com/user-attachments/assets/3d2b1f4b-5666-498a-b85c-d93816d9b48a" />
+
 
 
 Сохранённые настройки отображаются в форме, шапке и подвале сайта
 
-<img width="1149" height="773" alt="home6" src="https://github.com/user-attachments/assets/0c27032b-48ed-479e-a58f-3e07120dc92c" />
+<img width="1259" height="863" alt="пипа6" src="https://github.com/user-attachments/assets/9cd95aef-bc18-4a13-b15c-22774fe2e1ad" />
+
 
 
 Отчёт с общим количеством пользователей, ролями и числом новых записей за последние 7 дней
 
-<img width="1030" height="641" alt="home7" src="https://github.com/user-attachments/assets/a4acc5f1-d80d-4b2c-9375-fa73e572b250" />
+<img width="835" height="335" alt="пипа7" src="https://github.com/user-attachments/assets/4a146039-3ef1-4380-ba94-6d8200254510" />
 
 
 ### Задание 6
@@ -82,43 +88,39 @@
 
 Список пользователей с почтой, ролью и действиями
 
-<img width="1090" height="685" alt="home8" src="https://github.com/user-attachments/assets/169bd37c-6e96-4358-8edb-6fe15db298b1" />
+<img width="770" height="609" alt="пипа8" src="https://github.com/user-attachments/assets/6a85dbe1-f033-4eae-a738-e17f476bfaf4" />
+
 
 
 Просмотр данных отдельного пользователя
 
-<img width="1069" height="679" alt="home9" src="https://github.com/user-attachments/assets/45f67065-0919-4fe4-8514-15da3dc53d27" />
+<img width="1161" height="853" alt="пипа9" src="https://github.com/user-attachments/assets/76907b0d-60ae-4cb1-9651-d563d504724f" />
+
 
 
 Форма добавления пользователя с именем, почтой, ролью и паролем
 
-<img width="1026" height="847" alt="home10" src="https://github.com/user-attachments/assets/9a47ff40-f5ad-4a3a-94d1-157834c8595e" />
+<img width="1212" height="667" alt="пипа10" src="https://github.com/user-attachments/assets/06b20436-8623-431d-b85a-0217016548f3" />
+
 
 
 Новый пользователь появился в списке
 
-<img width="995" height="621" alt="home11" src="https://github.com/user-attachments/assets/08d9d127-ccac-4b8f-98de-48e56f9a2f97" />
+<img width="1180" height="772" alt="пипа11" src="https://github.com/user-attachments/assets/59ba4558-60a6-4f16-9918-336d4b64afe0" />
+
 
 
 Форма редактирования имени, почты и роли пользователя
 
-<img width="1053" height="809" alt="home12" src="https://github.com/user-attachments/assets/f8a31041-47b6-4f61-9965-184a152f9133" />
+<img width="1242" height="886" alt="пипа12" src="https://github.com/user-attachments/assets/7127c49a-e880-48a9-9483-40919e4dadf2" />
+
 
 
 Изменённые данные пользователя сохранены, назначена роль администратора
 
-<img width="1067" height="634" alt="home13" src="https://github.com/user-attachments/assets/95ad0566-0704-44f8-98fd-d415378d3183" />
-
-
 Страница подтверждения удаления выбранного пользователя
 
-<img width="901" height="610" alt="home14" src="https://github.com/user-attachments/assets/3355972e-b5b7-458a-8554-b91a6cc1d579" />
-
-
 Пользователь удалён, остальные учётные записи остались в списке
-
-<img width="959" height="613" alt="home15" src="https://github.com/user-attachments/assets/35bd29bb-d30c-460e-968f-b9e535097c77" />
-
 
 ### Задание 7
 
