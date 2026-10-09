@@ -96,3 +96,14 @@ SecureChat/
 3. Открыть второй браузер (или окно инкогнито), зарегистрировать второго пользователя: сообщения приходят друг другу мгновенно, работают «в сети» и «печатает...».
 4. F12 → Application → Cookies: кука `SecureChat.Auth` с флагом HttpOnly.
 5. Выйти: чат снова недоступен.
+
+
+<img width="1229" height="922" alt="пепа1" src="https://github.com/user-attachments/assets/1ed992d7-1de5-4618-875a-95451c9ea958" />
+
+<img width="1248" height="937" alt="пепа2" src="https://github.com/user-attachments/assets/54a32f7e-9640-4bb1-b811-7fd4ef05db06" />
+
+<img width="1255" height="925" alt="пепа3" src="https://github.com/user-attachments/assets/027b7929-8b50-42dd-9420-2b3a285197df" />
+
+<img width="1232" height="938" alt="пепа4" src="https://github.com/user-attachments/assets/abbbf00d-14d5-42fd-8729-90fa6832617b" />
+
+<img width="1288" height="941" alt="пепа5" src="https://github.com/user-attachments/assets/1d1f2988-ff70-4a83-83d0-257fe050c627" />
