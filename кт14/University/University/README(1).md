@@ -96,3 +96,15 @@ University/
 4. Удалить преподавателя Волкова: страница подтверждения покажет 2 курса и 3 записи, которые удалятся. После удаления у студента Петрова пропадут эти курсы, а сам студент останется.
 
 В консоли выводятся SQL-запросы EF Core, по ним видно, что происходит в базе.
+
+<img width="990" height="655" alt="пупа1" src="https://github.com/user-attachments/assets/8e008cee-5dcb-4643-95d4-41544c336dad" />
+
+<img width="1236" height="918" alt="пупа2" src="https://github.com/user-attachments/assets/54ebe01f-f918-4adc-bc76-177d043f15ae" />
+
+<img width="1041" height="747" alt="пупа3" src="https://github.com/user-attachments/assets/c07ac807-3ace-4b96-b591-49abe6ad4033" />
+
+<img width="1225" height="1076" alt="пупа4" src="https://github.com/user-attachments/assets/14ba003f-ae75-4ffb-9522-35ea4334e4e0" />
+
+<img width="1282" height="1117" alt="пупа5" src="https://github.com/user-attachments/assets/b4e38419-529d-4ffa-9e6e-41a66157d5e2" />
+
+
