@@ -22,7 +22,8 @@
 
 Главная страница до входа в систему
 
-![Главная страница](screen/home1.png)
+<img width="1143" height="550" alt="home1" src="https://github.com/user-attachments/assets/bbcbd05b-d98d-46ca-8d47-a23c6061f62d" />
+
 
 ### Задание 2
 
@@ -31,7 +32,8 @@
 
 Форма входа по почте и паролю
 
-![Вход в систему](screen/home2.png)
+<img width="860" height="569" alt="home2" src="https://github.com/user-attachments/assets/04f37840-206d-4ddb-8fc9-727764008264" />
+
 
 ### Задание 3
 
@@ -40,7 +42,8 @@
 
 Учётная запись с ролью «Пользователь»
 
-![Обычный пользователь](screen/home3.png)
+<img width="690" height="647" alt="home3" src="https://github.com/user-attachments/assets/369a0376-da5a-4469-88a3-5c34dacb1b5c" />
+
 
 ### Задание 4
 
@@ -49,7 +52,8 @@
 
 Отказ в доступе к админ-панели для обычного пользователя, статус 403
 
-![Доступ запрещён](screen/home4.png)
+<img width="813" height="516" alt="home4" src="https://github.com/user-attachments/assets/5af6a798-3b67-4768-ad22-2eed2a0f140f" />
+
 
 ### Задание 5
 
@@ -58,15 +62,18 @@
 
 Главная страница админ-панели с навигацией и общей информацией
 
-![Админ-панель](screen/home5.png)
+<img width="1024" height="749" alt="home5" src="https://github.com/user-attachments/assets/fd3fd153-cd3f-4099-a5d8-6fb3a44b11a9" />
+
 
 Сохранённые настройки отображаются в форме, шапке и подвале сайта
 
-![Настройки](screen/home6.png)
+<img width="1149" height="773" alt="home6" src="https://github.com/user-attachments/assets/0c27032b-48ed-479e-a58f-3e07120dc92c" />
+
 
 Отчёт с общим количеством пользователей, ролями и числом новых записей за последние 7 дней
 
-![Отчёты](screen/home7.png)
+<img width="1030" height="641" alt="home7" src="https://github.com/user-attachments/assets/a4acc5f1-d80d-4b2c-9375-fa73e572b250" />
+
 
 ### Задание 6
 
@@ -75,35 +82,43 @@
 
 Список пользователей с почтой, ролью и действиями
 
-![Список пользователей](screen/home8.png)
+<img width="1090" height="685" alt="home8" src="https://github.com/user-attachments/assets/169bd37c-6e96-4358-8edb-6fe15db298b1" />
+
 
 Просмотр данных отдельного пользователя
 
-![Просмотр пользователя](screen/home9.png)
+<img width="1069" height="679" alt="home9" src="https://github.com/user-attachments/assets/45f67065-0919-4fe4-8514-15da3dc53d27" />
+
 
 Форма добавления пользователя с именем, почтой, ролью и паролем
 
-![Форма добавления](screen/home10.png)
+<img width="1026" height="847" alt="home10" src="https://github.com/user-attachments/assets/9a47ff40-f5ad-4a3a-94d1-157834c8595e" />
+
 
 Новый пользователь появился в списке
 
-![Пользователь добавлен](screen/home11.png)
+<img width="995" height="621" alt="home11" src="https://github.com/user-attachments/assets/08d9d127-ccac-4b8f-98de-48e56f9a2f97" />
+
 
 Форма редактирования имени, почты и роли пользователя
 
-![Форма редактирования](screen/home12.png)
+<img width="1053" height="809" alt="home12" src="https://github.com/user-attachments/assets/f8a31041-47b6-4f61-9965-184a152f9133" />
+
 
 Изменённые данные пользователя сохранены, назначена роль администратора
 
-![Пользователь изменён](screen/home13.png)
+<img width="1067" height="634" alt="home13" src="https://github.com/user-attachments/assets/95ad0566-0704-44f8-98fd-d415378d3183" />
+
 
 Страница подтверждения удаления выбранного пользователя
 
-![Подтверждение удаления](screen/home14.png)
+<img width="901" height="610" alt="home14" src="https://github.com/user-attachments/assets/3355972e-b5b7-458a-8554-b91a6cc1d579" />
+
 
 Пользователь удалён, остальные учётные записи остались в списке
 
-![Пользователь удалён](screen/home15.png)
+<img width="959" height="613" alt="home15" src="https://github.com/user-attachments/assets/35bd29bb-d30c-460e-968f-b9e535097c77" />
+
 
 ### Задание 7
 
