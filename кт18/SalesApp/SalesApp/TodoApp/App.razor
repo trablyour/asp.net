@@ -1,0 +1,58 @@
+@using System.Diagnostics
+@using System.Reflection
+@using Microsoft.AspNetCore.Components.WebAssembly.Services
+@inject LazyAssemblyLoader AssemblyLoader
+@inject ILogger<App> Logger
+
+@* AdditionalAssemblies - сборки, в которых Router тоже ищет страницы (@page).
+   OnNavigateAsync срабатывает перед каждым переходом, в нем и подгружаем сборку. *@
+<Router AppAssembly="@typeof(App).Assembly"
+        AdditionalAssemblies="@lazyLoadedAssemblies"
+        OnNavigateAsync="@OnNavigateAsync">
+    <Navigating>
+        <LayoutView Layout="@typeof(MainLayout)">
+            <div class="lazy-loading">
+                <div class="spinner"></div>
+                Загрузка модуля графиков...
+            </div>
+        </LayoutView>
+    </Navigating>
+    <Found Context="routeData">
+        <RouteView RouteData="@routeData" DefaultLayout="@typeof(MainLayout)" />
+        <FocusOnNavigate RouteData="@routeData" Selector="h1" />
+    </Found>
+    <NotFound>
+        <PageTitle>Не найдено</PageTitle>
+        <LayoutView Layout="@typeof(MainLayout)">
+            <h1>Страница не найдена</h1>
+            <p>По этому адресу ничего нет.</p>
+        </LayoutView>
+    </NotFound>
+</Router>
+
+@code {
+    private readonly List<Assembly> lazyLoadedAssemblies = new();
+    private bool salesChartsLoaded;
+
+    private async Task OnNavigateAsync(NavigationContext context)
+    {
+        // сборку с графиками грузим только при переходе в раздел /sales, и только один раз
+        if (!context.Path.StartsWith("sales", StringComparison.OrdinalIgnoreCase) || salesChartsLoaded)
+            return;
+
+        try
+        {
+            var timer = Stopwatch.StartNew();
+
+            var assemblies = await AssemblyLoader.LoadAssembliesAsync(new[] { "SalesCharts.wasm" });
+            lazyLoadedAssemblies.AddRange(assemblies);
+            salesChartsLoaded = true;
+
+            Logger.LogInformation("Сборка SalesCharts загружена за {Ms} мс", timer.ElapsedMilliseconds);
+        }
+        catch (Exception ex)
+        {
+            Logger.LogError(ex, "Не удалось загрузить сборку SalesCharts");
+        }
+    }
+}

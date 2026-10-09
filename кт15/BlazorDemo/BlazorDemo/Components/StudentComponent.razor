@@ -1,0 +1,44 @@
+@inherits LocalizedComponentBase
+
+<div class="student-card">
+    <div class="avatar">@Name[0]</div>
+    <h3>@Name</h3>
+
+    <p class="age">@L["age"]: <b>@currentAge</b></p>
+    @if (currentAge != Age)
+    {
+        <p class="muted">@L["initial_age"]: @Age</p>
+    }
+
+    <div class="buttons">
+        <button @onclick="IncreaseAge">@L["add_year"]</button>
+        <button class="secondary" @onclick="ResetAge" disabled="@(currentAge == Age)">@L["reset"]</button>
+    </div>
+</div>
+
+@code {
+    [Parameter, EditorRequired]
+    public string Name { get; set; } = "";
+
+    [Parameter]
+    public int Age { get; set; }
+
+    // текущее значение храним отдельно, чтобы можно было вернуться к исходному Age
+    private int currentAge;
+
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+        currentAge = Age;
+    }
+
+    private void IncreaseAge()
+    {
+        currentAge++;
+    }
+
+    private void ResetAge()
+    {
+        currentAge = Age;
+    }
+}

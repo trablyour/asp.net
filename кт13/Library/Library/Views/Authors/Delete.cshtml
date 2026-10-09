@@ -1,0 +1,30 @@
+@model Author
+@{
+    ViewData["Title"] = "Удаление автора";
+}
+
+<h1>Удаление автора</h1>
+
+<div class="card form-card">
+    <p>Удалить автора <b>@Model.FullName</b>?</p>
+
+    @if (Model.Books.Count > 0)
+    {
+        <div class="alert warning">
+            Настроено каскадное удаление: вместе с автором будут удалены все его книги (@Model.Books.Count):
+            <ul>
+                @foreach (var book in Model.Books)
+                {
+                    <li>@book.Title (@book.Year)</li>
+                }
+            </ul>
+        </div>
+    }
+
+    <form asp-action="Delete" asp-route-id="@Model.Id" method="post">
+        <div class="buttons">
+            <button type="submit" class="danger-btn">Удалить</button>
+            <a class="btn secondary" asp-action="Details" asp-route-id="@Model.Id">Отмена</a>
+        </div>
+    </form>
+</div>

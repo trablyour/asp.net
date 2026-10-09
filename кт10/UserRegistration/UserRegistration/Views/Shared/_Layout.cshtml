@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - UserRegistration</title>
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+</head>
+<body>
+    <header class="topbar">
+        <span class="brand">UserRegistration</span>
+        <nav>
+            <a asp-controller="Home" asp-action="Index">Регистрация</a>
+            <a asp-controller="Home" asp-action="Users">Пользователи</a>
+            <a href="/swagger">API (Swagger)</a>
+        </nav>
+    </header>
+
+    <main class="page">
+        @RenderBody()
+    </main>
+</body>
+</html>

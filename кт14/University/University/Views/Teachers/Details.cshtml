@@ -1,0 +1,45 @@
+@model Teacher
+@{
+    ViewData["Title"] = Model.FullName;
+}
+
+<h1>@Model.FullName</h1>
+
+<div class="card">
+    <p><b>Email:</b> @Model.Email</p>
+    <p><b>Кафедра:</b> @(Model.Department ?? "не указана")</p>
+    <div class="buttons">
+        <a class="btn" asp-action="Edit" asp-route-id="@Model.Id">Изменить</a>
+        <a class="btn danger-btn" asp-action="Delete" asp-route-id="@Model.Id">Удалить</a>
+    </div>
+</div>
+
+<div class="page-head">
+    <h2>Курсы преподавателя (@Model.Courses.Count)</h2>
+    <a class="btn" asp-controller="Courses" asp-action="Create" asp-route-teacherId="@Model.Id">+ Новый курс</a>
+</div>
+
+@if (Model.Courses.Count == 0)
+{
+    <p class="muted">Курсов пока нет.</p>
+}
+else
+{
+    <div class="table-wrap">
+        <table class="table">
+            <thead><tr><th>Курс</th><th>Кредиты</th><th>Студентов</th></tr></thead>
+            <tbody>
+                @foreach (var c in Model.Courses.OrderBy(c => c.Title))
+                {
+                    <tr>
+                        <td><a asp-controller="Courses" asp-action="Details" asp-route-id="@c.Id">@c.Title</a></td>
+                        <td>@c.Credits</td>
+                        <td>@c.Enrollments.Count</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}
+
+<p><a asp-action="Index">← Все преподаватели</a></p>

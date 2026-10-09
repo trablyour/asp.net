@@ -1,0 +1,409 @@
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: "Segoe UI", Arial, sans-serif;
+    background: #f1f2f8;
+    color: #222;
+}
+
+code {
+    background: #e9eaf3;
+    padding: 2px 6px;
+    border-radius: 3px;
+    font-size: 13px;
+}
+
+.muted {
+    color: #6b6f80;
+    font-size: 14px;
+}
+
+/* ---------- каркас ---------- */
+
+.layout {
+    display: flex;
+    min-height: 100vh;
+}
+
+.sidebar {
+    width: 240px;
+    flex-shrink: 0;
+    background: linear-gradient(180deg, #3b2f86, #512bd4);
+    color: #fff;
+}
+
+.logo {
+    padding: 22px 20px;
+    font-size: 20px;
+    font-weight: 700;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+.nav {
+    display: flex;
+    flex-direction: column;
+    padding: 10px;
+    gap: 2px;
+}
+
+.nav a {
+    color: #e3defc;
+    text-decoration: none;
+    padding: 10px 12px;
+    border-radius: 5px;
+    font-size: 14px;
+}
+
+.nav a:hover {
+    background: rgba(255, 255, 255, 0.1);
+    color: #fff;
+}
+
+.nav a.active {
+    background: rgba(255, 255, 255, 0.22);
+    color: #fff;
+}
+
+.nav a.broken {
+    color: #ffc9c9;
+}
+
+.main {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 18px 30px;
+    background: #fff;
+    border-bottom: 1px solid #e2e3ec;
+}
+
+.header h1 {
+    margin: 0;
+    font-size: 24px;
+}
+
+.route {
+    margin-top: 4px;
+    font-size: 13px;
+    color: #6b6f80;
+}
+
+.content {
+    padding: 30px;
+}
+
+h2 {
+    margin-top: 0;
+}
+
+/* ---------- кнопки ---------- */
+
+button {
+    padding: 8px 16px;
+    border: none;
+    border-radius: 5px;
+    background: #512bd4;
+    color: #fff;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+button:hover:not(:disabled) {
+    background: #3f1fb0;
+}
+
+button:disabled {
+    opacity: 0.45;
+    cursor: default;
+}
+
+button.secondary {
+    background: #e4e1f5;
+    color: #3b2f86;
+}
+
+button.secondary:hover:not(:disabled) {
+    background: #d4cff0;
+}
+
+button.danger {
+    background: #d23c3c;
+}
+
+button.danger:hover {
+    background: #b02f2f;
+}
+
+.nav-btn {
+    background: #1f9d6a;
+}
+
+.nav-btn:hover {
+    background: #187d54 !important;
+}
+
+.buttons {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin: 15px 0;
+}
+
+/* ---------- язык ---------- */
+
+.lang {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 14px;
+    color: #6b6f80;
+}
+
+.lang button {
+    padding: 5px 10px;
+    background: #eceaf6;
+    color: #3b2f86;
+}
+
+.lang button.active {
+    background: #512bd4;
+    color: #fff;
+}
+
+/* ---------- кликер ---------- */
+
+.students {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    margin: 20px 0;
+}
+
+.student-card {
+    background: #fff;
+    border: 1px solid #e2e3ec;
+    border-radius: 10px;
+    padding: 22px;
+    width: 230px;
+    text-align: center;
+}
+
+.student-card h3 {
+    margin: 10px 0 6px;
+}
+
+.avatar {
+    width: 56px;
+    height: 56px;
+    margin: 0 auto;
+    border-radius: 50%;
+    background: #ece7fd;
+    color: #512bd4;
+    font-size: 24px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.age {
+    font-size: 18px;
+}
+
+.student-card .buttons {
+    justify-content: center;
+}
+
+/* ---------- товары ---------- */
+
+.chips {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 15px;
+    flex-wrap: wrap;
+}
+
+.chip {
+    padding: 6px 14px;
+    border-radius: 20px;
+    background: #fff;
+    border: 1px solid #d9d6ee;
+    color: #3b2f86;
+    text-decoration: none;
+    font-size: 14px;
+}
+
+.chip.active {
+    background: #512bd4;
+    border-color: #512bd4;
+    color: #fff;
+}
+
+.info {
+    background: #fff;
+    border-left: 4px solid #512bd4;
+    padding: 10px 14px;
+    border-radius: 4px;
+    font-size: 14px;
+}
+
+.info.warning {
+    border-left-color: #e0a100;
+    background: #fff8e6;
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 15px;
+    margin: 15px 0;
+}
+
+.item-card, .details-card {
+    background: #fff;
+    border: 1px solid #e2e3ec;
+    border-radius: 10px;
+    padding: 18px;
+}
+
+.item-card h3 {
+    margin: 10px 0 6px;
+    font-size: 17px;
+}
+
+.details-card {
+    max-width: 520px;
+}
+
+.tag {
+    display: inline-block;
+    font-size: 12px;
+    padding: 2px 9px;
+    border-radius: 10px;
+    background: #ece7fd;
+    color: #512bd4;
+}
+
+.price {
+    font-weight: 700;
+    color: #1f9d6a;
+}
+
+.lifecycle {
+    margin-top: 20px;
+    font-size: 13px;
+    color: #6b6f80;
+    border-top: 1px dashed #d4d5e0;
+    padding-top: 10px;
+}
+
+/* ---------- таблица ---------- */
+
+.table {
+    width: 100%;
+    max-width: 700px;
+    border-collapse: collapse;
+    background: #fff;
+    border: 1px solid #e2e3ec;
+    margin: 15px 0;
+    font-size: 14px;
+}
+
+.table th, .table td {
+    padding: 11px 14px;
+    text-align: left;
+    border-bottom: 1px solid #eeeff5;
+}
+
+.table th {
+    background: #f7f7fb;
+}
+
+/* ---------- ошибки и 404 ---------- */
+
+.error-box {
+    background: #fdecec;
+    border: 1px solid #f1bcbc;
+    border-radius: 8px;
+    padding: 20px;
+    max-width: 600px;
+}
+
+.error-box h2 {
+    color: #a52a2a;
+}
+
+.notfound {
+    text-align: center;
+    padding: 40px 20px;
+}
+
+.notfound .code {
+    font-size: 72px;
+    font-weight: 800;
+    color: #512bd4;
+}
+
+/* ---------- уведомления ---------- */
+
+.toasts {
+    position: fixed;
+    right: 20px;
+    bottom: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    z-index: 100;
+}
+
+.toast {
+    background: #2b2541;
+    color: #fff;
+    padding: 12px 18px;
+    border-radius: 6px;
+    font-size: 14px;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.2);
+    animation: slide-in 0.25s ease-out;
+}
+
+@keyframes slide-in {
+    from {
+        transform: translateX(30px);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+/* ---------- стандартная плашка ошибки Blazor ---------- */
+
+#blazor-error-ui {
+    background: lightyellow;
+    bottom: 0;
+    box-shadow: 0 -1px 2px rgba(0, 0, 0, 0.2);
+    display: none;
+    left: 0;
+    padding: 0.6rem 1.25rem 0.7rem 1.25rem;
+    position: fixed;
+    width: 100%;
+    z-index: 1000;
+}
+
+#blazor-error-ui .dismiss {
+    cursor: pointer;
+    position: absolute;
+    right: 0.75rem;
+    top: 0.5rem;
+}

@@ -1,0 +1,284 @@
+@using System.Text.RegularExpressions
+
+<div class="card">
+    <h2>Форма обратной связи</h2>
+
+    <div class="field">
+        <label for="fb-name">Имя</label>
+        <input id="fb-name" type="text" class="@Css(nameError, nameTouched)"
+               value="@name" @oninput="OnNameInput" placeholder="Как к вам обращаться" />
+        @if (nameTouched && nameError != null)
+        {
+            <span class="error">@nameError</span>
+        }
+    </div>
+
+    <div class="field">
+        <label for="fb-email">Email</label>
+        <input id="fb-email" type="text" class="@Css(emailError, emailTouched)"
+               value="@email" @oninput="OnEmailInput" placeholder="you@example.com" />
+        @if (emailTouched && emailError != null)
+        {
+            <span class="error">@emailError</span>
+        }
+    </div>
+
+    <div class="field">
+        <label for="fb-text">Сообщение</label>
+        <textarea id="fb-text" rows="5" class="@Css(textError, textTouched)"
+                  value="@text" @oninput="OnTextInput" @onkeydown="OnTextKeyDown"
+                  placeholder="Ваше сообщение (Ctrl+Enter для отправки)"></textarea>
+        <div class="row-between">
+            @if (textTouched && textError != null)
+            {
+                <span class="error">@textError</span>
+            }
+            else
+            {
+                <span></span>
+            }
+            <span class="counter @(text.Length > MaxText ? "over" : "")">@text.Length / @MaxText</span>
+        </div>
+    </div>
+
+    @* необязательная капча: простой пример *@
+    <div class="field">
+        <label for="fb-captcha">Капча: сколько будет @captchaA + @captchaB?</label>
+        <div class="captcha-row">
+            <input id="fb-captcha" type="text" class="@Css(captchaError, captchaTouched)"
+                   value="@captchaAnswer" @oninput="OnCaptchaInput" placeholder="Ответ" />
+            <button type="button" class="secondary small" @onclick="NewCaptcha" title="Другой пример">↻</button>
+        </div>
+        @if (captchaTouched && captchaError != null)
+        {
+            <span class="error">@captchaError</span>
+        }
+    </div>
+
+    <div class="buttons">
+        <button @onclick="Submit">Отправить</button>
+        <button class="secondary" @onclick="Clear">Очистить</button>
+    </div>
+
+    @if (showSuccess)
+    {
+        <div class="success">Форма отправлена!</div>
+    }
+    else if (submitAttempted && !IsValid)
+    {
+        <div class="fail">Исправьте ошибки в форме</div>
+    }
+</div>
+
+@if (lastSent != null)
+{
+    <div class="card result">
+        <h2>Отправленные данные</h2>
+        <p><b>Имя:</b> @lastSent.Name</p>
+        <p><b>Email:</b> @lastSent.Email</p>
+        <p><b>Сообщение:</b></p>
+        <p class="message">@lastSent.Text</p>
+        <p class="muted">Отправлено в @lastSent.SentAt.ToString("HH:mm:ss")</p>
+    </div>
+}
+
+@if (history.Count > 1)
+{
+    <div class="card">
+        <h2>Все отправки (@history.Count)</h2>
+        <ul class="history">
+            @foreach (var m in history)
+            {
+                <li><b>@m.Name</b> (@m.Email), @m.SentAt.ToString("HH:mm:ss")</li>
+            }
+        </ul>
+    </div>
+}
+
+@code {
+    private const int MaxText = 500;
+    private const int MinText = 10;
+
+    private static readonly Regex EmailRegex = new(@"^[^@\s]+@[^@\s]+\.[a-zA-Z]{2,}$");
+    private static readonly Regex NameRegex = new(@"^[a-zA-Zа-яА-ЯёЁ\s\-]+$");
+
+    private string name = "";
+    private string email = "";
+    private string text = "";
+    private string captchaAnswer = "";
+
+    private string? nameError;
+    private string? emailError;
+    private string? textError;
+    private string? captchaError;
+
+    // ошибку показываем только после того, как пользователь начал вводить в поле
+    private bool nameTouched;
+    private bool emailTouched;
+    private bool textTouched;
+    private bool captchaTouched;
+
+    private bool submitAttempted;
+    private bool showSuccess;
+
+    private int captchaA;
+    private int captchaB;
+
+    // сюда сохраняются отправленные данные
+    private FeedbackMessage? lastSent;
+    private readonly List<FeedbackMessage> history = new();
+
+    private bool IsValid => nameError == null && emailError == null && textError == null && captchaError == null;
+
+    protected override void OnInitialized()
+    {
+        NewCaptcha();
+        ValidateAll();
+    }
+
+    // ---------- обработчики ввода ----------
+
+    private void OnNameInput(ChangeEventArgs e)
+    {
+        name = e.Value?.ToString() ?? "";
+        nameTouched = true;
+        showSuccess = false;
+        nameError = ValidateName(name);
+    }
+
+    private void OnEmailInput(ChangeEventArgs e)
+    {
+        email = e.Value?.ToString() ?? "";
+        emailTouched = true;
+        showSuccess = false;
+        emailError = ValidateEmail(email);
+    }
+
+    private void OnTextInput(ChangeEventArgs e)
+    {
+        text = e.Value?.ToString() ?? "";
+        textTouched = true;
+        showSuccess = false;
+        textError = ValidateText(text);
+    }
+
+    private void OnCaptchaInput(ChangeEventArgs e)
+    {
+        captchaAnswer = e.Value?.ToString() ?? "";
+        captchaTouched = true;
+        showSuccess = false;
+        captchaError = ValidateCaptcha(captchaAnswer);
+    }
+
+    // Ctrl+Enter в поле сообщения отправляет форму
+    private void OnTextKeyDown(KeyboardEventArgs e)
+    {
+        if (e.CtrlKey && e.Key == "Enter")
+            Submit();
+    }
+
+    // ---------- проверки ----------
+
+    private static string? ValidateName(string value)
+    {
+        value = value.Trim();
+        if (value.Length == 0) return "Введите имя";
+        if (value.Length < 2) return "Имя должно быть не короче 2 символов";
+        if (value.Length > 50) return "Имя должно быть не длиннее 50 символов";
+        if (!NameRegex.IsMatch(value)) return "Имя может содержать только буквы, пробел и дефис";
+        return null;
+    }
+
+    private static string? ValidateEmail(string value)
+    {
+        value = value.Trim();
+        if (value.Length == 0) return "Введите email";
+        if (!value.Contains('@')) return "В email должен быть символ @";
+        if (!EmailRegex.IsMatch(value)) return "Некорректный email, пример: name@mail.ru";
+        return null;
+    }
+
+    private static string? ValidateText(string value)
+    {
+        int length = value.Trim().Length;
+        if (length == 0) return "Введите сообщение";
+        if (length < MinText) return $"Сообщение слишком короткое: еще минимум {MinText - length} симв.";
+        if (value.Length > MaxText) return $"Сообщение длиннее {MaxText} символов";
+        return null;
+    }
+
+    private string? ValidateCaptcha(string value)
+    {
+        if (value.Trim().Length == 0) return "Решите пример";
+        if (!int.TryParse(value.Trim(), out int answer) || answer != captchaA + captchaB)
+            return "Неверный ответ";
+        return null;
+    }
+
+    private void ValidateAll()
+    {
+        nameError = ValidateName(name);
+        emailError = ValidateEmail(email);
+        textError = ValidateText(text);
+        captchaError = ValidateCaptcha(captchaAnswer);
+    }
+
+    // ---------- кнопки ----------
+
+    private void Submit()
+    {
+        submitAttempted = true;
+        ValidateAll();
+
+        // показываем ошибки во всех полях, даже если их еще не трогали
+        nameTouched = emailTouched = textTouched = captchaTouched = true;
+
+        if (!IsValid)
+        {
+            showSuccess = false;
+            return;
+        }
+
+        // сохраняем в локальную переменную
+        lastSent = new FeedbackMessage
+        {
+            Name = name.Trim(),
+            Email = email.Trim(),
+            Text = text.Trim(),
+            SentAt = DateTime.Now
+        };
+        history.Insert(0, lastSent);
+
+        showSuccess = true;
+        ResetFields();
+    }
+
+    private void Clear()
+    {
+        ResetFields();
+        showSuccess = false;
+    }
+
+    private void ResetFields()
+    {
+        name = email = text = captchaAnswer = "";
+        nameTouched = emailTouched = textTouched = captchaTouched = false;
+        submitAttempted = false;
+        NewCaptcha();
+        ValidateAll();
+    }
+
+    private void NewCaptcha()
+    {
+        captchaA = Random.Shared.Next(1, 10);
+        captchaB = Random.Shared.Next(1, 10);
+        captchaAnswer = "";
+        captchaError = ValidateCaptcha(captchaAnswer);
+    }
+
+    private static string Css(string? error, bool touched)
+    {
+        if (!touched) return "";
+        return error == null ? "valid" : "invalid";
+    }
+}

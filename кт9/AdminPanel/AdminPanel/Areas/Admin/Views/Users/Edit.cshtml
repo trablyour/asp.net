@@ -1,0 +1,34 @@
+@model EditUserViewModel
+@{
+    ViewData["Title"] = "Редактирование";
+}
+
+<h1>Редактирование пользователя</h1>
+
+<div class="card narrow">
+    <form asp-action="Edit" method="post">
+        <div asp-validation-summary="ModelOnly" class="validation"></div>
+        <input type="hidden" asp-for="Id" />
+
+        <label asp-for="FullName"></label>
+        <input asp-for="FullName" />
+        <span asp-validation-for="FullName" class="field-error"></span>
+
+        <label asp-for="Email"></label>
+        <input asp-for="Email" />
+        <span asp-validation-for="Email" class="field-error"></span>
+
+        <label asp-for="Role"></label>
+        <select asp-for="Role" asp-items="@(new SelectList(Roles.All))"></select>
+        <span asp-validation-for="Role" class="field-error"></span>
+
+        <label asp-for="NewPassword"></label>
+        <input asp-for="NewPassword" placeholder="оставьте пустым, чтобы не менять" />
+        <span asp-validation-for="NewPassword" class="field-error"></span>
+
+        <div class="buttons">
+            <button type="submit">Сохранить</button>
+            <a class="btn secondary" asp-action="Index">Отмена</a>
+        </div>
+    </form>
+</div>

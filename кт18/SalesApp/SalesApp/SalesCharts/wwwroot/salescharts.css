@@ -1,0 +1,375 @@
+/* стили компонентов SalesCharts (подключаются как _content/SalesCharts/salescharts.css) */
+
+.sc-note {
+    color: #6b6f80;
+    font-size: 14px;
+}
+
+.sc-note code {
+    background: #ece7fd;
+    color: #512bd4;
+    padding: 1px 6px;
+    border-radius: 4px;
+}
+
+/* ---------- панель ---------- */
+
+.sc-toolbar {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    flex-wrap: wrap;
+    margin-bottom: 12px;
+}
+
+.sc-segment {
+    display: flex;
+    background: #e9e8f3;
+    border-radius: 7px;
+    padding: 3px;
+}
+
+.sc-segment button {
+    border: none;
+    background: none;
+    padding: 7px 13px;
+    border-radius: 5px;
+    font-size: 13px;
+    color: #4b4f60;
+    cursor: pointer;
+    font-family: inherit;
+}
+
+.sc-segment button.active {
+    background: #fff;
+    color: #512bd4;
+    font-weight: 600;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.sc-toolbar select {
+    padding: 8px 10px;
+    border: 1px solid #cdd0dd;
+    border-radius: 6px;
+    font-family: inherit;
+    font-size: 14px;
+}
+
+.sc-check {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+.sc-btn {
+    display: inline-block;
+    padding: 8px 15px;
+    border: none;
+    border-radius: 6px;
+    background: #512bd4;
+    color: #fff;
+    font-size: 14px;
+    font-family: inherit;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.sc-btn:hover {
+    background: #3f1fb0;
+}
+
+.sc-btn.secondary {
+    background: #e7e4f7;
+    color: #3b2f86;
+}
+
+.sc-btn.secondary:hover {
+    background: #d8d3f2;
+}
+
+.sc-live {
+    color: #d23c3c;
+    font-weight: 700;
+    font-size: 13px;
+    animation: sc-blink 1.2s infinite;
+}
+
+.sc-live.paused {
+    color: #9a9db0;
+    animation: none;
+}
+
+@keyframes sc-blink {
+    50% {
+        opacity: 0.35;
+    }
+}
+
+/* ---------- показатели ---------- */
+
+.sc-kpis {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+    gap: 12px;
+    margin-bottom: 16px;
+}
+
+.sc-kpi {
+    background: #fff;
+    border: 1px solid #e3e4ec;
+    border-radius: 10px;
+    padding: 14px 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.sc-kpi span {
+    font-size: 12px;
+    color: #7a7e8f;
+}
+
+.sc-kpi b {
+    font-size: 20px;
+}
+
+.sc-kpi small {
+    font-size: 12px;
+    color: #7a7e8f;
+}
+
+.sc-kpi b.up {
+    color: #1f9d6a;
+}
+
+.sc-kpi b.down {
+    color: #d23c3c;
+}
+
+/* ---------- график ---------- */
+
+.sc-chart {
+    background: #fff;
+    border: 1px solid #e3e4ec;
+    border-radius: 10px;
+    padding: 16px;
+    margin-bottom: 16px;
+}
+
+.sc-title {
+    font-weight: 600;
+    margin-bottom: 8px;
+}
+
+.sc-empty {
+    padding: 50px;
+    text-align: center;
+    color: #9a9db0;
+}
+
+.sc-svg {
+    width: 100%;
+    height: auto;
+    display: block;
+    user-select: none;
+}
+
+.sc-grid {
+    stroke: #eceef4;
+    stroke-width: 1;
+}
+
+.sc-axis {
+    font-size: 11px;
+    fill: #8a8ea0;
+}
+
+.sc-line {
+    fill: none;
+    stroke-width: 2.5;
+    stroke-linejoin: round;
+    stroke-linecap: round;
+}
+
+.sc-area {
+    opacity: 0.13;
+}
+
+.sc-bar {
+    opacity: 0.85;
+    transition: opacity 0.15s;
+}
+
+.sc-bar.active {
+    opacity: 1;
+}
+
+.sc-hover-band {
+    fill: #512bd4;
+    opacity: 0.05;
+}
+
+.sc-tooltip rect {
+    fill: #2b2541;
+    opacity: 0.94;
+}
+
+.sc-tip-title {
+    fill: #fff;
+    font-size: 13px;
+    font-weight: 700;
+}
+
+.sc-tip-text {
+    fill: #e6e3f3;
+    font-size: 12px;
+}
+
+.sc-legend {
+    display: flex;
+    gap: 16px;
+    justify-content: center;
+    font-size: 13px;
+    color: #4b4f60;
+    margin-top: 6px;
+}
+
+.sc-legend i {
+    display: inline-block;
+    width: 12px;
+    height: 12px;
+    border-radius: 3px;
+    margin-right: 6px;
+    vertical-align: -1px;
+}
+
+/* ---------- круговая ---------- */
+
+.sc-pie {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+.sc-pie-svg {
+    width: 240px;
+    max-width: 100%;
+    height: auto;
+}
+
+.sc-pie-seg {
+    cursor: pointer;
+    transition: opacity 0.15s;
+}
+
+.sc-pie-label {
+    font-size: 13px;
+    fill: #7a7e8f;
+}
+
+.sc-pie-value {
+    font-size: 20px;
+    font-weight: 700;
+    fill: #222;
+}
+
+.sc-pie-legend {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    flex: 1;
+    min-width: 160px;
+}
+
+.sc-pie-legend li {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 8px;
+    border-radius: 5px;
+    font-size: 14px;
+    cursor: default;
+}
+
+.sc-pie-legend li.active {
+    background: #f2f0fb;
+}
+
+.sc-pie-legend i, .sc-dot {
+    display: inline-block;
+    width: 12px;
+    height: 12px;
+    border-radius: 3px;
+    flex-shrink: 0;
+}
+
+.sc-dot {
+    margin-right: 8px;
+    vertical-align: -1px;
+}
+
+.sc-pie-legend .name {
+    flex: 1;
+}
+
+.sc-pie-legend .pct {
+    font-weight: 600;
+}
+
+.sc-two {
+    display: grid;
+    grid-template-columns: 1fr 1.4fr;
+    gap: 16px;
+    align-items: start;
+}
+
+@media (max-width: 900px) {
+    .sc-two {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* ---------- таблица ---------- */
+
+.sc-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: #fff;
+    border: 1px solid #e3e4ec;
+    margin: 12px 0;
+    font-size: 14px;
+}
+
+.sc-table th, .sc-table td {
+    padding: 10px 14px;
+    text-align: left;
+    border-bottom: 1px solid #eef0f5;
+}
+
+.sc-table th {
+    background: #f7f7fb;
+}
+
+.sc-table tfoot td {
+    font-weight: 700;
+    background: #faf9fe;
+}
+
+.sc-share {
+    height: 8px;
+    background: #f0eff6;
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.sc-share div {
+    height: 100%;
+    border-radius: 4px;
+}
+
+.sc-footer {
+    margin-top: 16px;
+}

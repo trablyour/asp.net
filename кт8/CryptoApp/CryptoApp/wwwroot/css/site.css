@@ -1,0 +1,141 @@
+body {
+    margin: 0;
+    font-family: "Segoe UI", Arial, sans-serif;
+    background: #f2f4f7;
+    color: #222;
+}
+
+.header {
+    background: #263445;
+    color: #fff;
+    padding: 14px 30px;
+    font-size: 18px;
+    font-weight: 600;
+}
+
+.content {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 25px;
+}
+
+h1 {
+    font-size: 26px;
+}
+
+h2 {
+    margin-top: 0;
+    font-size: 19px;
+}
+
+.card {
+    background: #fff;
+    border: 1px solid #dde1e6;
+    border-radius: 6px;
+    padding: 20px;
+    margin-bottom: 20px;
+}
+
+.columns {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+}
+
+@media (max-width: 800px) {
+    .columns {
+        grid-template-columns: 1fr;
+    }
+}
+
+.row {
+    display: flex;
+    gap: 15px;
+    align-items: flex-end;
+    margin-bottom: 15px;
+}
+
+label {
+    display: block;
+    font-size: 14px;
+    margin: 10px 0 5px;
+}
+
+label.inline {
+    margin: 0;
+}
+
+input, select, textarea {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 8px;
+    border: 1px solid #bcc3cc;
+    border-radius: 4px;
+    font-size: 14px;
+    font-family: inherit;
+}
+
+select {
+    min-width: 220px;
+}
+
+textarea {
+    resize: vertical;
+}
+
+textarea[readonly] {
+    background: #f7f8fa;
+}
+
+.mono {
+    font-family: Consolas, "Courier New", monospace;
+    font-size: 13px;
+}
+
+button {
+    margin-top: 10px;
+    padding: 9px 20px;
+    border: none;
+    border-radius: 4px;
+    background: #2f6fde;
+    color: #fff;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+button:hover {
+    background: #2559b5;
+}
+
+button.secondary {
+    margin-top: 0;
+    background: #5b6775;
+}
+
+button.secondary:hover {
+    background: #4a5460;
+}
+
+.hint {
+    color: #6b7380;
+    font-size: 13px;
+    margin: 6px 0 0;
+}
+
+.alert {
+    padding: 12px 15px;
+    border-radius: 4px;
+    margin-bottom: 15px;
+}
+
+.alert.success {
+    background: #e3f4e6;
+    color: #1e6b2c;
+    border: 1px solid #b9e0c0;
+}
+
+.alert.error {
+    background: #fbe6e6;
+    color: #9b2222;
+    border: 1px solid #f0bcbc;
+}

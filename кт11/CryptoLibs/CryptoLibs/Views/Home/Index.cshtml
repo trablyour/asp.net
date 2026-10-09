@@ -1,0 +1,16 @@
+@{
+    ViewData["Title"] = "Главная";
+}
+
+<h1>Шифрование с помощью сторонних библиотек</h1>
+
+<div class="tiles">
+    <a class="tile" asp-controller="BouncyCastle" asp-action="Index">
+        <b>Задание 1. Bouncy Castle</b>
+        <span>AES-256 в режиме GCM. Пакет BouncyCastle.Cryptography.</span>
+    </a>
+    <a class="tile" asp-controller="Sodium" asp-action="Index">
+        <b>Задание 2. libsodium</b>
+        <span>crypto_secretbox: XSalsa20 + Poly1305. Пакет Sodium.Core (libsodium-core).</span>
+    </a>
+</div>

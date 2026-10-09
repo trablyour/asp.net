@@ -1,0 +1,15 @@
+@{
+    ViewData["Title"] = "Редактирование";
+}
+
+<h1>Форма редактирования</h1>
+
+<form asp-controller="Page" asp-action="Edit" method="post">
+    <input type="text" name="message" placeholder="Введите сообщение" />
+    <button type="submit">Отправить</button>
+</form>
+
+@if (ViewBag.Message != null)
+{
+    <p class="result">Отправленное сообщение: <b>@ViewBag.Message</b></p>
+}

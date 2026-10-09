@@ -1,0 +1,21 @@
+@page "/"
+@inherits LocalizedComponentBase
+@inject NavigationManager Nav
+
+<h2>@L["clicker_title"]</h2>
+<p class="muted">@L["clicker_text"]</p>
+
+<div class="students">
+    <StudentComponent Name="Иван" Age="19" />
+    <StudentComponent Name="Анна" Age="21" />
+    <StudentComponent Name="Олег" Age="18" />
+</div>
+
+<button class="nav-btn" @onclick="GoToProducts">@L["go_products"] →</button>
+
+@code {
+    private void GoToProducts()
+    {
+        Nav.NavigateTo("/products");
+    }
+}

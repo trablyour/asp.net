@@ -1,0 +1,24 @@
+@model CourseFormViewModel
+
+<label asp-for="Title"></label>
+<input asp-for="Title" />
+<span asp-validation-for="Title" class="field-error"></span>
+
+<div class="grid-2">
+    <div>
+        <label asp-for="TeacherId"></label>
+        <select asp-for="TeacherId" asp-items="ViewBag.Teachers">
+            <option value="0">-- выберите --</option>
+        </select>
+        <span asp-validation-for="TeacherId" class="field-error"></span>
+    </div>
+    <div>
+        <label asp-for="Credits"></label>
+        <input asp-for="Credits" />
+        <span asp-validation-for="Credits" class="field-error"></span>
+    </div>
+</div>
+
+<label asp-for="Description"></label>
+<textarea asp-for="Description" rows="3"></textarea>
+<span asp-validation-for="Description" class="field-error"></span>

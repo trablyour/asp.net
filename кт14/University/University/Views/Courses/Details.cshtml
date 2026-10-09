@@ -1,0 +1,68 @@
+@model Course
+@{
+    ViewData["Title"] = Model.Title;
+    var available = (Microsoft.AspNetCore.Mvc.Rendering.SelectList)ViewBag.AvailableStudents;
+    var teachers = (Microsoft.AspNetCore.Mvc.Rendering.SelectList)ViewBag.Teachers;
+}
+
+<h1>@Model.Title</h1>
+
+<div class="columns">
+    <div class="card">
+        <p><b>Описание:</b> @(Model.Description ?? "-")</p>
+        <p><b>Кредиты:</b> @Model.Credits</p>
+        <p><b>Преподаватель:</b> <a asp-controller="Teachers" asp-action="Details" asp-route-id="@Model.TeacherId">@Model.Teacher.FullName</a></p>
+        <div class="buttons">
+            <a class="btn" asp-action="Edit" asp-route-id="@Model.Id">Изменить</a>
+            <a class="btn danger-btn" asp-action="Delete" asp-route-id="@Model.Id">Удалить</a>
+        </div>
+    </div>
+
+    <div class="card">
+        <h2>Назначить преподавателя</h2>
+        <form asp-action="AssignTeacher" asp-route-id="@Model.Id" method="post" class="inline-add">
+            <select name="teacherId" asp-items="teachers"></select>
+            <button type="submit">Назначить</button>
+        </form>
+    </div>
+</div>
+
+<h2>Студенты курса (@Model.Enrollments.Count)</h2>
+
+@if (available.Any())
+{
+    <form asp-action="AddStudent" asp-route-id="@Model.Id" method="post" class="inline-add">
+        <select name="studentId" asp-items="available"></select>
+        <button type="submit">Добавить на курс</button>
+    </form>
+}
+else
+{
+    <p class="muted">Все студенты уже записаны на этот курс.</p>
+}
+
+@if (Model.Enrollments.Count > 0)
+{
+    <div class="table-wrap">
+        <table class="table">
+            <thead><tr><th>Студент</th><th>Группа</th><th>Дата записи</th><th></th></tr></thead>
+            <tbody>
+                @foreach (var e in Model.Enrollments.OrderBy(e => e.Student.LastName))
+                {
+                    <tr>
+                        <td><a asp-controller="Students" asp-action="Details" asp-route-id="@e.StudentId">@e.Student.FullName</a></td>
+                        <td>@e.Student.Group</td>
+                        <td>@e.EnrolledAt.ToString("dd.MM.yyyy")</td>
+                        <td class="actions">
+                            <form asp-action="RemoveStudent" asp-route-id="@Model.Id" asp-route-studentId="@e.StudentId" method="post">
+                                <button type="submit" class="link-danger">Убрать с курса</button>
+                            </form>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}
+
+<p><a asp-action="Index">← Все курсы</a></p>

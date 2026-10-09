@@ -1,0 +1,60 @@
+@page "/details/{Id:int}"
+@inherits LocalizedComponentBase
+@inject DataService Data
+@inject NavigationManager Nav
+
+@if (product == null)
+{
+    <div class="info warning">@L["product_not_found"]: <code>@Id</code></div>
+}
+else
+{
+    <div class="details-card">
+        <span class="tag">@L["cat_" + product.Category]</span>
+        <h2>@L.Pick(product.NameRu, product.NameEn)</h2>
+        <p>@L.Pick(product.DescriptionRu, product.DescriptionEn)</p>
+        <p class="price">@L["price"]: @L.Money(product.Price)</p>
+    </div>
+}
+
+<div class="buttons">
+    <button class="secondary" @onclick="Prev" disabled="@(Id <= 1)">@L["prev"]</button>
+    <button class="secondary" @onclick="Next" disabled="@(Id >= Data.MaxProductId)">@L["next"]</button>
+    @if (product != null)
+    {
+        <button @onclick="BackToCategory">@L["back_to_category"]</button>
+    }
+</div>
+
+<div class="lifecycle">
+    <p>@L["details_lifecycle"]</p>
+    <p>@L["init_calls"]: <b>@initCount</b> &nbsp; @L["params_calls"]: <b>@paramsCount</b></p>
+</div>
+
+@code {
+    [Parameter]
+    public int Id { get; set; }
+
+    private Product? product;
+    private int initCount;
+    private int paramsCount;
+
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+        initCount++;
+    }
+
+    // при переходе /details/1 -> /details/2 компонент тот же, меняется только параметр
+    protected override void OnParametersSet()
+    {
+        paramsCount++;
+        product = Data.GetProduct(Id);
+    }
+
+    private void Prev() => Nav.NavigateTo($"/details/{Id - 1}");
+
+    private void Next() => Nav.NavigateTo($"/details/{Id + 1}");
+
+    private void BackToCategory() => Nav.NavigateTo($"/products/{product!.Category}");
+}

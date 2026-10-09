@@ -1,0 +1,13 @@
+@* Router ищет компоненты с @page и подставляет нужный по адресу *@
+<Router AppAssembly="@typeof(App).Assembly">
+    <Found Context="routeData">
+        <RouteView RouteData="@routeData" DefaultLayout="@typeof(MainLayout)" />
+        <FocusOnNavigate RouteData="@routeData" Selector="h1" />
+    </Found>
+    <NotFound>
+        @* свой компонент для несуществующих адресов *@
+        <LayoutView Layout="@typeof(MainLayout)">
+            <NotFoundPage />
+        </LayoutView>
+    </NotFound>
+</Router>

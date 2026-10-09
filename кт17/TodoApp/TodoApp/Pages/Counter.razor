@@ -1,0 +1,18 @@
+@page "/counter"
+
+<PageTitle>Счетчик</PageTitle>
+
+<h1>Счетчик</h1>
+
+<p role="status">Текущее значение: <b>@currentCount</b></p>
+
+<button class="btn" @onclick="IncrementCount">Нажми меня</button>
+
+@code {
+    private int currentCount = 0;
+
+    private void IncrementCount()
+    {
+        currentCount++;
+    }
+}

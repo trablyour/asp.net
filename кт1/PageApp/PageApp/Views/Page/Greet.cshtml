@@ -1,0 +1,6 @@
+@model string
+@{
+    ViewData["Title"] = "Привет";
+}
+
+<h1>Привет, @(string.IsNullOrEmpty(Model) ? "гость" : Model)!</h1>

@@ -1,0 +1,60 @@
+@model Author
+@{
+    ViewData["Title"] = Model.FullName;
+}
+
+<h1>@Model.FullName</h1>
+
+<div class="card">
+    <p><b>Год рождения:</b> @(Model.BirthYear?.ToString() ?? "не указан")</p>
+    <p><b>Страна:</b> @(Model.Country ?? "не указана")</p>
+    <p><b>Биография:</b> @(Model.Biography ?? "-")</p>
+
+    <div class="buttons">
+        <a class="btn" asp-action="Edit" asp-route-id="@Model.Id">Изменить</a>
+        <a class="btn danger-btn" asp-action="Delete" asp-route-id="@Model.Id">Удалить</a>
+    </div>
+</div>
+
+<div class="page-head">
+    <h2>Книги автора (@Model.Books.Count)</h2>
+    <a class="btn" asp-controller="Books" asp-action="Create" asp-route-authorId="@Model.Id">+ Добавить книгу</a>
+</div>
+
+@if (Model.Books.Count == 0)
+{
+    <p class="muted">У автора пока нет книг.</p>
+}
+else
+{
+    <div class="table-wrap">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Название</th>
+                    <th>Год</th>
+                    <th>Жанр</th>
+                    <th>Страниц</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var book in Model.Books)
+                {
+                    <tr>
+                        <td><a asp-controller="Books" asp-action="Details" asp-route-id="@book.Id">@book.Title</a></td>
+                        <td>@book.Year</td>
+                        <td>@book.Genre</td>
+                        <td>@book.Pages</td>
+                        <td class="actions">
+                            <a asp-controller="Books" asp-action="Edit" asp-route-id="@book.Id">Изменить</a>
+                            <a class="danger" asp-controller="Books" asp-action="Delete" asp-route-id="@book.Id">Удалить</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}
+
+<p><a asp-action="Index">← Все авторы</a></p>

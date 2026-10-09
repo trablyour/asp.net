@@ -1,0 +1,18 @@
+@model UserProfile
+@{
+    ViewData["Title"] = "Удаление профиля";
+}
+
+<h1>Удаление профиля</h1>
+
+<div class="card form-card">
+    <p>Удалить профиль <b>@Model.FullName</b> пользователя <b>@Model.User.Username</b>?</p>
+    <p class="muted">Сам пользователь останется, у него просто не будет профиля.</p>
+
+    <form asp-action="Delete" asp-route-userId="@Model.UserId" method="post">
+        <div class="buttons">
+            <button type="submit" class="danger-btn">Удалить профиль</button>
+            <a class="btn secondary" asp-controller="Users" asp-action="Details" asp-route-id="@Model.UserId">Отмена</a>
+        </div>
+    </form>
+</div>

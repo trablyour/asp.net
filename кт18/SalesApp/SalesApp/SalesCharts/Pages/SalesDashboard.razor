@@ -1,0 +1,291 @@
+@page "/sales"
+@implements IDisposable
+@inject NavigationManager Nav
+
+<PageTitle>Динамика продаж</PageTitle>
+
+<h1>Динамика продаж</h1>
+<p class="sc-note">
+    Эта страница и компоненты графиков лежат в отдельной сборке <code>@AssemblyName</code>,
+    которая скачивается только при первом переходе в раздел.
+</p>
+
+@* ---------- панель управления ---------- *@
+<div class="sc-toolbar">
+    <div class="sc-segment">
+        @foreach (var p in Periods)
+        {
+            <button class="@(period == p.Key ? "active" : "")" @onclick="() => SetPeriod(p.Key)">@p.Value</button>
+        }
+    </div>
+
+    <select @bind="regionIndex" @bind:after="Reload" disabled="@IsLive">
+        @for (int i = 0; i < SalesDataGenerator.Regions.Length; i++)
+        {
+            <option value="@i">@SalesDataGenerator.Regions[i]</option>
+        }
+    </select>
+
+    <div class="sc-segment">
+        <button class="@(chartType == ChartType.Line ? "active" : "")" @onclick="() => chartType = ChartType.Line">Линия</button>
+        <button class="@(chartType == ChartType.Area ? "active" : "")" @onclick="() => chartType = ChartType.Area">Область</button>
+        <button class="@(chartType == ChartType.Bar ? "active" : "")" @onclick="() => chartType = ChartType.Bar">Столбцы</button>
+    </div>
+</div>
+
+<div class="sc-toolbar">
+    <label class="sc-check">
+        <input type="checkbox" @bind="compare" @bind:after="Reload" disabled="@IsLive" />
+        Сравнить с прошлым периодом
+    </label>
+
+    @if (IsLive)
+    {
+        <button class="sc-btn @(paused ? "" : "secondary")" @onclick="TogglePause">@(paused ? "▶ Продолжить" : "⏸ Пауза")</button>
+        <span class="sc-live @(paused ? "paused" : "")">● LIVE</span>
+    }
+    else
+    {
+        <button class="sc-btn secondary" @onclick="Regenerate">↻ Новые данные</button>
+    }
+
+    <a class="sc-btn secondary" href="@CsvHref" download="@CsvFileName">⬇ Экспорт CSV</a>
+</div>
+
+@* ---------- показатели ---------- *@
+<div class="sc-kpis">
+    <div class="sc-kpi">
+        <span>@(IsLive ? "Последнее значение" : "Выручка за период")</span>
+        <b>@ChartMath.Money(IsLive ? Current.LastOrDefault()?.Value ?? 0 : Total)</b>
+    </div>
+    <div class="sc-kpi">
+        <span>Среднее</span>
+        <b>@ChartMath.Money(Average)</b>
+    </div>
+    <div class="sc-kpi">
+        <span>Максимум</span>
+        <b>@ChartMath.Money(Max?.Value ?? 0)</b>
+        <small>@Max?.Label</small>
+    </div>
+    @if (!IsLive)
+    {
+        <div class="sc-kpi">
+            <span>К прошлому периоду</span>
+            <b class="@(Growth >= 0 ? "up" : "down")">@(Growth >= 0 ? "▲" : "▼") @ChartMath.Percent(Math.Abs(Growth))</b>
+        </div>
+    }
+</div>
+
+@* ---------- график ---------- *@
+<SalesChartComponent Series="series" Type="chartType" Title="@ChartTitle" />
+
+@* ---------- таблица ---------- *@
+<button class="sc-btn secondary" @onclick="() => showTable = !showTable">
+    @(showTable ? "Скрыть таблицу" : "Показать таблицу")
+</button>
+
+@if (showTable)
+{
+    <table class="sc-table">
+        <thead>
+            <tr>
+                <th>Период</th>
+                @foreach (var s in series)
+                {
+                    <th>@s.Name</th>
+                }
+            </tr>
+        </thead>
+        <tbody>
+            @for (int i = 0; i < Current.Count; i++)
+            {
+                <tr>
+                    <td>@Current[i].Label</td>
+                    @foreach (var s in series)
+                    {
+                        <td>@(i < s.Points.Count ? ChartMath.Money(s.Points[i].Value) : "—")</td>
+                    }
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+<div class="sc-footer">
+    <button class="sc-btn" @onclick="GoToProducts">Продажи по товарам →</button>
+</div>
+
+@code {
+    private static readonly Dictionary<SalesPeriod, string> Periods = new()
+    {
+        [SalesPeriod.Week] = "Неделя",
+        [SalesPeriod.Month] = "Месяц",
+        [SalesPeriod.Year] = "Год",
+        [SalesPeriod.Live] = "Онлайн"
+    };
+
+    private SalesPeriod period = SalesPeriod.Month;
+    private int regionIndex;
+    private ChartType chartType = ChartType.Area;
+    private bool compare = true;
+    private bool showTable;
+    private int seed = 1;
+
+    private List<SalesSeries> series = new();
+    private List<SalesPoint> previousPoints = new();
+
+    // онлайн-режим
+    private CancellationTokenSource? liveCts;
+    private readonly Random liveRandom = new();
+    private bool paused;
+
+    private bool IsLive => period == SalesPeriod.Live;
+    private string AssemblyName => typeof(SalesDashboard).Assembly.GetName().Name ?? "";
+
+    private List<SalesPoint> Current => series.Count > 0 ? series[0].Points : new();
+    private decimal Total => Current.Sum(p => p.Value);
+    private decimal Average => Current.Count == 0 ? 0 : Math.Round(Total / Current.Count);
+    private SalesPoint? Max => Current.OrderByDescending(p => p.Value).FirstOrDefault();
+
+    private double Growth
+    {
+        get
+        {
+            decimal prev = previousPoints.Sum(p => p.Value);
+            return prev == 0 ? 0 : (double)((Total - prev) / prev) * 100;
+        }
+    }
+
+    private string ChartTitle => IsLive
+        ? "Продажи в реальном времени (обновление каждые 2 сек.)"
+        : $"Выручка: {Periods[period].ToLower()}, {SalesDataGenerator.Regions[regionIndex]}";
+
+    protected override void OnInitialized()
+    {
+        Reload();
+    }
+
+    private void SetPeriod(SalesPeriod value)
+    {
+        period = value;
+        Reload();
+    }
+
+    private void Regenerate()
+    {
+        seed++;
+        Reload();
+    }
+
+    private void Reload()
+    {
+        StopLive();
+
+        if (IsLive)
+        {
+            series = new()
+            {
+                new SalesSeries { Name = "Продажи", Color = "#1f9d6a", Points = SalesDataGenerator.LiveStart(liveRandom, 20) }
+            };
+            previousPoints = new();
+            StartLive();
+            return;
+        }
+
+        var current = SalesDataGenerator.Generate(period, regionIndex, seed);
+        previousPoints = SalesDataGenerator.Generate(period, regionIndex, seed, previous: true);
+
+        series = new()
+        {
+            new SalesSeries { Name = "Текущий период", Color = "#512bd4", Points = current }
+        };
+
+        if (compare)
+            series.Add(new SalesSeries { Name = "Прошлый период", Color = "#f59e0b", Points = previousPoints });
+    }
+
+    // ---------- онлайн-обновление ----------
+
+    private void StartLive()
+    {
+        paused = false;
+        liveCts = new CancellationTokenSource();
+        _ = RunLiveAsync(liveCts.Token);
+    }
+
+    private void StopLive()
+    {
+        liveCts?.Cancel();
+        liveCts?.Dispose();
+        liveCts = null;
+    }
+
+    private async Task RunLiveAsync(CancellationToken token)
+    {
+        using var timer = new PeriodicTimer(TimeSpan.FromSeconds(2));
+        try
+        {
+            while (await timer.WaitForNextTickAsync(token))
+            {
+                if (paused)
+                    continue;
+
+                var points = series[0].Points;
+                decimal next = SalesDataGenerator.NextLiveValue(liveRandom, points[^1].Value);
+                points.Add(new SalesPoint { Label = DateTime.Now.ToString("HH:mm:ss"), Value = next });
+
+                // окно из последних 20 точек
+                if (points.Count > 20)
+                    points.RemoveAt(0);
+
+                StateHasChanged();
+            }
+        }
+        catch (OperationCanceledException)
+        {
+            // остановили таймер - это нормально
+        }
+    }
+
+    private void TogglePause()
+    {
+        paused = !paused;
+    }
+
+    // ---------- экспорт ----------
+
+    private string CsvFileName => $"sales_{period.ToString().ToLower()}.csv";
+
+    private string CsvHref
+    {
+        get
+        {
+            // BOM в начале, чтобы Excel правильно открыл кириллицу
+            var sb = new StringBuilder("\uFEFF");
+            sb.Append("Период");
+            foreach (var s in series)
+                sb.Append(';').Append(s.Name);
+            sb.AppendLine();
+
+            for (int i = 0; i < Current.Count; i++)
+            {
+                sb.Append(Current[i].Label);
+                foreach (var s in series)
+                    sb.Append(';').Append(i < s.Points.Count ? s.Points[i].Value.ToString(System.Globalization.CultureInfo.InvariantCulture) : "");
+                sb.AppendLine();
+            }
+
+            return "data:text/csv;charset=utf-8," + Uri.EscapeDataString(sb.ToString());
+        }
+    }
+
+    private void GoToProducts()
+    {
+        Nav.NavigateTo("/sales/products");
+    }
+
+    public void Dispose()
+    {
+        StopLive();
+    }
+}

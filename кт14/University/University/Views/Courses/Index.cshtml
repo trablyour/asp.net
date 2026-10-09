@@ -1,0 +1,32 @@
+@model List<Course>
+@{
+    ViewData["Title"] = "Курсы";
+}
+
+<div class="page-head">
+    <h1>Курсы</h1>
+    <a class="btn" asp-action="Create">+ Новый курс</a>
+</div>
+
+<div class="table-wrap">
+    <table class="table">
+        <thead>
+            <tr><th>Курс</th><th>Преподаватель</th><th>Кредиты</th><th>Студентов</th><th></th></tr>
+        </thead>
+        <tbody>
+            @foreach (var c in Model)
+            {
+                <tr>
+                    <td><a asp-action="Details" asp-route-id="@c.Id">@c.Title</a></td>
+                    <td><a asp-controller="Teachers" asp-action="Details" asp-route-id="@c.TeacherId">@c.Teacher.FullName</a></td>
+                    <td>@c.Credits</td>
+                    <td><span class="badge">@c.Enrollments.Count</span></td>
+                    <td class="actions">
+                        <a asp-action="Edit" asp-route-id="@c.Id">Изменить</a>
+                        <a class="danger" asp-action="Delete" asp-route-id="@c.Id">Удалить</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

@@ -1,0 +1,54 @@
+@page "/catalog/{Section?}"
+@inherits LocalizedComponentBase
+@inject NavigationManager Nav
+
+<p class="info">@L["catalog_text"]</p>
+
+@if (componentType != null)
+{
+    @* сюда подставляется ProductList или ServiceList *@
+    <DynamicComponent Type="componentType" />
+}
+else
+{
+    @if (!string.IsNullOrEmpty(Section))
+    {
+        <p class="info warning">@L["unknown_section"]: <code>@Section</code></p>
+    }
+
+    <h3>@L["catalog_choose"]</h3>
+}
+
+<div class="buttons">
+    @foreach (var key in Sections.Keys)
+    {
+        <button class="@(string.Equals(key, Section, StringComparison.OrdinalIgnoreCase) ? "" : "secondary")"
+                @onclick="() => Open(key)">
+            @L["section_" + key]
+        </button>
+    }
+    <button class="nav-btn" @onclick="GoHome">@L["go_home"]</button>
+</div>
+
+@code {
+    [Parameter]
+    public string? Section { get; set; }
+
+    // какой компонент показывать для какого значения в маршруте
+    private static readonly Dictionary<string, Type> Sections = new(StringComparer.OrdinalIgnoreCase)
+    {
+        ["products"] = typeof(ProductList),
+        ["services"] = typeof(ServiceList)
+    };
+
+    private Type? componentType;
+
+    protected override void OnParametersSet()
+    {
+        componentType = Section != null && Sections.TryGetValue(Section, out var type) ? type : null;
+    }
+
+    private void Open(string key) => Nav.NavigateTo($"/catalog/{key}");
+
+    private void GoHome() => Nav.NavigateTo("/");
+}

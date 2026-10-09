@@ -1,0 +1,50 @@
+@model List<User>
+@{
+    ViewData["Title"] = "Пользователи";
+}
+
+<div class="page-head">
+    <h1>Пользователи</h1>
+    <a class="btn" asp-action="Create">+ Добавить пользователя</a>
+</div>
+
+<div class="table-wrap">
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Логин</th>
+                <th>Email</th>
+                <th>Профиль</th>
+                <th>Город</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var user in Model)
+            {
+                <tr>
+                    <td>@user.Id</td>
+                    <td>@user.Username</td>
+                    <td>@user.Email</td>
+                    <td>
+                        @if (user.Profile != null)
+                        {
+                            @user.Profile.FullName
+                        }
+                        else
+                        {
+                            <span class="badge gray">нет профиля</span>
+                        }
+                    </td>
+                    <td>@user.Profile?.City</td>
+                    <td class="actions">
+                        <a asp-action="Details" asp-route-id="@user.Id">Открыть</a>
+                        <a asp-action="Edit" asp-route-id="@user.Id">Изменить</a>
+                        <a class="danger" asp-action="Delete" asp-route-id="@user.Id">Удалить</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

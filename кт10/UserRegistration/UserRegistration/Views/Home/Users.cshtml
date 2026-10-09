@@ -1,0 +1,31 @@
+@model List<User>
+@{
+    ViewData["Title"] = "Пользователи";
+}
+
+<h1>Зарегистрированные пользователи</h1>
+<p class="hint">Данные хранятся в in-memory базе и сбрасываются при перезапуске приложения.</p>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>Имя</th>
+            <th>Email</th>
+            <th>Хэш пароля</th>
+            <th>Дата регистрации</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var user in Model)
+        {
+            <tr>
+                <td>@user.Id</td>
+                <td>@user.Username</td>
+                <td>@user.Email</td>
+                <td class="hash">@(user.PasswordHash.Length > 20 ? user.PasswordHash.Substring(0, 20) + "..." : user.PasswordHash)</td>
+                <td>@user.CreatedAt.ToString("dd.MM.yyyy HH:mm:ss")</td>
+            </tr>
+        }
+    </tbody>
+</table>

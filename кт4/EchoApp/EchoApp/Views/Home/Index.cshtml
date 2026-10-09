@@ -1,0 +1,48 @@
+@{
+    ViewData["Title"] = "Echo";
+}
+
+<h1>Проверка HttpRequest</h1>
+
+<div class="form">
+    <label>
+        Метод
+        <select id="method">
+            <option>GET</option>
+            <option>POST</option>
+            <option>PUT</option>
+            <option>DELETE</option>
+        </select>
+    </label>
+
+    <label>
+        Адрес
+        <select id="url">
+            <option>/Echo/Get</option>
+            <option>/Echo/Post</option>
+            <option>/Echo/Headers</option>
+            <option>/Echo/Query</option>
+            <option>/Echo/Body</option>
+        </select>
+    </label>
+
+    <label>
+        Строка запроса
+        <input id="query" type="text" placeholder="name=Tom&age=25" />
+    </label>
+
+    <label class="wide">
+        Тело запроса (для POST/PUT)
+        <textarea id="body" rows="4" placeholder="любой текст"></textarea>
+    </label>
+
+    <button id="send" type="button">Отправить</button>
+</div>
+
+<h3>Ответ</h3>
+<p class="status">Статус: <span id="status">-</span>, Content-Type: <span id="ctype">-</span></p>
+<pre id="result" class="result"></pre>
+
+@section Scripts {
+    <script src="~/js/echo.js" asp-append-version="true"></script>
+}

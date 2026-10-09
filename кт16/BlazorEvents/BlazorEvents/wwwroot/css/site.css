@@ -1,0 +1,280 @@
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: "Segoe UI", Arial, sans-serif;
+    background: #f1f2f8;
+    color: #222;
+}
+
+.topbar {
+    display: flex;
+    align-items: center;
+    gap: 30px;
+    padding: 14px 30px;
+    background: #512bd4;
+}
+
+.brand {
+    color: #fff;
+    font-weight: 700;
+    font-size: 18px;
+}
+
+.topbar nav {
+    display: flex;
+    gap: 6px;
+}
+
+.topbar nav a {
+    color: #e3defc;
+    text-decoration: none;
+    padding: 7px 14px;
+    border-radius: 5px;
+    font-size: 14px;
+}
+
+.topbar nav a:hover,
+.topbar nav a.active {
+    background: rgba(255, 255, 255, 0.2);
+    color: #fff;
+}
+
+.content {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 30px;
+}
+
+h1 {
+    margin: 0 0 6px;
+    font-size: 26px;
+}
+
+h2 {
+    margin: 0 0 15px;
+    font-size: 19px;
+}
+
+.muted {
+    color: #6b6f80;
+    font-size: 14px;
+}
+
+code {
+    font-size: 13px;
+}
+
+.two-cols {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    margin-top: 20px;
+    align-items: start;
+}
+
+@media (max-width: 850px) {
+    .two-cols {
+        grid-template-columns: 1fr;
+    }
+}
+
+.card {
+    background: #fff;
+    border: 1px solid #e2e3ec;
+    border-radius: 10px;
+    padding: 22px;
+}
+
+.card p {
+    margin: 8px 0;
+}
+
+.field {
+    margin-bottom: 16px;
+}
+
+label, .label {
+    display: block;
+    font-size: 14px;
+    font-weight: 600;
+    margin-bottom: 6px;
+}
+
+input[type="text"], input[type="number"], textarea {
+    width: 100%;
+    padding: 9px 11px;
+    border: 1px solid #c8cad8;
+    border-radius: 6px;
+    font-size: 14px;
+    font-family: inherit;
+    transition: border-color 0.15s;
+}
+
+input:focus, textarea:focus {
+    outline: none;
+    border-color: #512bd4;
+}
+
+textarea {
+    resize: vertical;
+}
+
+input.valid, textarea.valid {
+    border-color: #1f9d6a;
+    background: #f5fcf8;
+}
+
+input.invalid, textarea.invalid {
+    border-color: #d23c3c;
+    background: #fff7f7;
+}
+
+.error {
+    display: block;
+    color: #c03030;
+    font-size: 13px;
+    margin-top: 4px;
+}
+
+.radios {
+    display: flex;
+    gap: 20px;
+}
+
+.radio {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-weight: 400;
+    margin: 0;
+}
+
+.row-between {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+}
+
+.counter {
+    font-size: 12px;
+    color: #6b6f80;
+    margin-top: 4px;
+    white-space: nowrap;
+}
+
+.counter.over {
+    color: #c03030;
+    font-weight: 700;
+}
+
+.captcha-row {
+    display: flex;
+    gap: 8px;
+    max-width: 220px;
+}
+
+button {
+    padding: 9px 18px;
+    border: none;
+    border-radius: 6px;
+    background: #512bd4;
+    color: #fff;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+button:hover {
+    background: #3f1fb0;
+}
+
+button.secondary {
+    background: #e4e1f5;
+    color: #3b2f86;
+}
+
+button.secondary:hover {
+    background: #d4cff0;
+}
+
+button.small {
+    padding: 6px 12px;
+    font-size: 16px;
+}
+
+.buttons {
+    display: flex;
+    gap: 10px;
+}
+
+.success {
+    margin-top: 16px;
+    padding: 12px 15px;
+    border-radius: 6px;
+    background: #e3f4e6;
+    color: #1e6b2c;
+    border: 1px solid #b9e0c0;
+    font-weight: 600;
+}
+
+.fail {
+    margin-top: 16px;
+    padding: 12px 15px;
+    border-radius: 6px;
+    background: #fbe6e6;
+    color: #9b2222;
+    border: 1px solid #f0bcbc;
+}
+
+.result {
+    border-left: 4px solid #512bd4;
+}
+
+.summary {
+    margin-top: 14px !important;
+    padding: 10px 12px;
+    background: #f4f1fe;
+    border-radius: 6px;
+}
+
+.message {
+    white-space: pre-wrap;
+    background: #f7f7fb;
+    padding: 10px 12px;
+    border-radius: 6px;
+}
+
+.log {
+    grid-column: 1 / -1;
+}
+
+.log ul, .history {
+    margin: 0;
+    padding-left: 18px;
+}
+
+.log li, .history li {
+    margin: 4px 0;
+    font-size: 14px;
+}
+
+#blazor-error-ui {
+    background: lightyellow;
+    bottom: 0;
+    box-shadow: 0 -1px 2px rgba(0, 0, 0, 0.2);
+    display: none;
+    left: 0;
+    padding: 0.6rem 1.25rem 0.7rem 1.25rem;
+    position: fixed;
+    width: 100%;
+    z-index: 1000;
+}
+
+#blazor-error-ui .dismiss {
+    cursor: pointer;
+    position: absolute;
+    right: 0.75rem;
+    top: 0.5rem;
+}

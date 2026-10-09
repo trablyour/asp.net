@@ -1,0 +1,42 @@
+@model RegisterViewModel
+@{
+    ViewData["Title"] = "Регистрация";
+}
+
+<div class="card">
+    <h1>Регистрация</h1>
+
+    @if (TempData["Success"] != null)
+    {
+        <div class="alert success">@TempData["Success"]</div>
+    }
+
+    @if (!ViewData.ModelState.IsValid)
+    {
+        <div class="alert error">Форма заполнена с ошибками. Исправьте отмеченные поля.</div>
+    }
+
+    @* novalidate отключает проверку браузером, чтобы была видна именно серверная валидация *@
+    <form asp-action="Index" method="post" novalidate>
+
+        <label asp-for="Username"></label>
+        <input asp-for="Username" class="@(ViewData.ModelState["Username"]?.Errors.Count > 0 ? "invalid" : "")" />
+        <span asp-validation-for="Username" class="field-error"></span>
+        <p class="hint">Не менее 3 символов, только буквы</p>
+
+        <label asp-for="Email"></label>
+        <input asp-for="Email" class="@(ViewData.ModelState["Email"]?.Errors.Count > 0 ? "invalid" : "")" />
+        <span asp-validation-for="Email" class="field-error"></span>
+
+        <label asp-for="Password"></label>
+        <input asp-for="Password" class="@(ViewData.ModelState["Password"]?.Errors.Count > 0 ? "invalid" : "")" />
+        <span asp-validation-for="Password" class="field-error"></span>
+        <p class="hint">Не менее 8 символов, буквы и цифры</p>
+
+        <label asp-for="ConfirmPassword"></label>
+        <input asp-for="ConfirmPassword" class="@(ViewData.ModelState["ConfirmPassword"]?.Errors.Count > 0 ? "invalid" : "")" />
+        <span asp-validation-for="ConfirmPassword" class="field-error"></span>
+
+        <button type="submit">Зарегистрироваться</button>
+    </form>
+</div>

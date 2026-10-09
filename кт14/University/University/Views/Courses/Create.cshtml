@@ -1,0 +1,14 @@
+@model CourseFormViewModel
+@{
+    ViewData["Title"] = "Новый курс";
+}
+
+<h1>Новый курс</h1>
+
+<form asp-action="Create" method="post" novalidate>
+    <div class="card form-card"><partial name="_Form" model="Model" /></div>
+    <div class="buttons">
+        <button type="submit">Создать</button>
+        <a class="btn secondary" asp-action="Index">Отмена</a>
+    </div>
+</form>

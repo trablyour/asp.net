@@ -1,0 +1,149 @@
+<div class="card">
+    <h2>Анкета</h2>
+
+    <div class="field">
+        <label for="name">Имя</label>
+        @* oninput срабатывает на каждый введенный символ *@
+        <input id="name" type="text" value="@name" @oninput="OnNameInput" placeholder="Введите имя" />
+    </div>
+
+    <div class="field">
+        <label for="age">Возраст</label>
+        <input id="age" type="number" value="@ageText" @oninput="OnAgeInput" placeholder="Введите возраст" />
+        @if (ageError != null)
+        {
+            <span class="error">@ageError</span>
+        }
+    </div>
+
+    <div class="field">
+        <span class="label">Пол</span>
+        <div class="radios">
+            @* onchange срабатывает, когда выбран вариант *@
+            <label class="radio">
+                <input type="radio" name="gender" value="male" checked="@(gender == "male")" @onchange="OnGenderChange" />
+                Мужской
+            </label>
+            <label class="radio">
+                <input type="radio" name="gender" value="female" checked="@(gender == "female")" @onchange="OnGenderChange" />
+                Женский
+            </label>
+        </div>
+    </div>
+
+    <button class="secondary" @onclick="Reset">Сбросить</button>
+</div>
+
+<div class="card result">
+    <h2>Введенные данные</h2>
+    <p><b>Имя:</b> @(string.IsNullOrWhiteSpace(name) ? "—" : name)</p>
+    <p><b>Возраст:</b> @(age?.ToString() ?? "—")</p>
+    <p><b>Пол:</b> @GenderText</p>
+
+    @if (!string.IsNullOrWhiteSpace(name) && age != null && gender != "")
+    {
+        <p class="summary">
+            @name, @age @AgeWord(age.Value), @GenderText.ToLower() пол
+        </p>
+    }
+</div>
+
+<div class="card log">
+    <h2>Журнал событий</h2>
+    @if (events.Count == 0)
+    {
+        <p class="muted">Начните вводить данные</p>
+    }
+    else
+    {
+        <ul>
+            @foreach (var e in events)
+            {
+                <li><code>@e</code></li>
+            }
+        </ul>
+    }
+</div>
+
+@code {
+    // начальные значения, к ним возвращает кнопка "Сбросить"
+    private const string DefaultName = "";
+    private const string DefaultGender = "";
+
+    private string name = DefaultName;
+    private string ageText = "";
+    private int? age;
+    private string? ageError;
+    private string gender = DefaultGender;
+
+    private readonly List<string> events = new();
+
+    private string GenderText => gender switch
+    {
+        "male" => "Мужской",
+        "female" => "Женский",
+        _ => "—"
+    };
+
+    private void OnNameInput(ChangeEventArgs e)
+    {
+        name = e.Value?.ToString() ?? "";
+        Log($"oninput: name = \"{name}\"");
+    }
+
+    private void OnAgeInput(ChangeEventArgs e)
+    {
+        ageText = e.Value?.ToString() ?? "";
+
+        if (string.IsNullOrEmpty(ageText))
+        {
+            age = null;
+            ageError = null;
+        }
+        else if (int.TryParse(ageText, out int value) && value >= 1 && value <= 120)
+        {
+            age = value;
+            ageError = null;
+        }
+        else
+        {
+            age = null;
+            ageError = "Возраст должен быть числом от 1 до 120";
+        }
+
+        Log($"oninput: age = \"{ageText}\"");
+    }
+
+    private void OnGenderChange(ChangeEventArgs e)
+    {
+        gender = e.Value?.ToString() ?? "";
+        Log($"onchange: gender = \"{gender}\"");
+    }
+
+    private void Reset()
+    {
+        name = DefaultName;
+        ageText = "";
+        age = null;
+        ageError = null;
+        gender = DefaultGender;
+        Log("onclick: форма сброшена");
+    }
+
+    private void Log(string text)
+    {
+        events.Insert(0, $"{DateTime.Now:HH:mm:ss}  {text}");
+        if (events.Count > 8)
+            events.RemoveAt(events.Count - 1);
+    }
+
+    private static string AgeWord(int n)
+    {
+        int last2 = n % 100;
+        int last = n % 10;
+        if (last2 >= 11 && last2 <= 14) return "лет";
+        if (last == 1) return "год";
+        if (last >= 2 && last <= 4) return "года";
+        return "лет";
+    }
+}

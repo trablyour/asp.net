@@ -1,0 +1,24 @@
+<Project Sdk="Microsoft.NET.Sdk.BlazorWebAssembly">
+
+  <PropertyGroup>
+    <TargetFramework>net7.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="7.0.11" />
+    <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="7.0.11" PrivateAssets="all" />
+  </ItemGroup>
+
+  <!-- сборка с графиками продаж -->
+  <ItemGroup>
+    <ProjectReference Include="..\SalesCharts\SalesCharts.csproj" />
+  </ItemGroup>
+
+  <!-- отложенная загрузка: в .NET 7 указывается .dll -->
+  <ItemGroup>
+    <BlazorWebAssemblyLazyLoad Include="SalesCharts.dll" />
+  </ItemGroup>
+
+</Project>

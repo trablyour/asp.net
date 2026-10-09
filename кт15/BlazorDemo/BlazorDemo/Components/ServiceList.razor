@@ -1,0 +1,22 @@
+@inherits LocalizedComponentBase
+@inject DataService Data
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>@L["service"]</th>
+            <th>@L["duration"]</th>
+            <th>@L["price"]</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var s in Data.GetServices())
+        {
+            <tr>
+                <td>@L.Pick(s.NameRu, s.NameEn)</td>
+                <td>@s.DurationDays @L["days"]</td>
+                <td>@L.Money(s.Price)</td>
+            </tr>
+        }
+    </tbody>
+</table>

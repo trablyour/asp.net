@@ -1,0 +1,22 @@
+@model TeacherFormViewModel
+
+<div class="grid-2">
+    <div>
+        <label asp-for="LastName"></label>
+        <input asp-for="LastName" />
+        <span asp-validation-for="LastName" class="field-error"></span>
+    </div>
+    <div>
+        <label asp-for="FirstName"></label>
+        <input asp-for="FirstName" />
+        <span asp-validation-for="FirstName" class="field-error"></span>
+    </div>
+</div>
+
+<label asp-for="Email"></label>
+<input asp-for="Email" />
+<span asp-validation-for="Email" class="field-error"></span>
+
+<label asp-for="Department"></label>
+<input asp-for="Department" />
+<span asp-validation-for="Department" class="field-error"></span>

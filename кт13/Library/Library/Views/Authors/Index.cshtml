@@ -1,0 +1,38 @@
+@model List<Author>
+@{
+    ViewData["Title"] = "Авторы";
+}
+
+<div class="page-head">
+    <h1>Авторы</h1>
+    <a class="btn" asp-action="Create">+ Добавить автора</a>
+</div>
+
+<div class="table-wrap">
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Автор</th>
+                <th>Год рождения</th>
+                <th>Страна</th>
+                <th>Книг</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var author in Model)
+            {
+                <tr>
+                    <td><a asp-action="Details" asp-route-id="@author.Id">@author.FullName</a></td>
+                    <td>@author.BirthYear</td>
+                    <td>@author.Country</td>
+                    <td><span class="badge">@author.Books.Count</span></td>
+                    <td class="actions">
+                        <a asp-action="Edit" asp-route-id="@author.Id">Изменить</a>
+                        <a class="danger" asp-action="Delete" asp-route-id="@author.Id">Удалить</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

@@ -1,0 +1,13 @@
+@model ApplicationUser
+@{
+    ViewData["Title"] = "Профиль";
+}
+
+<h1>Профиль</h1>
+
+<div class="card narrow">
+    <p><b>Имя:</b> @Model.FullName</p>
+    <p><b>Email:</b> @Model.Email</p>
+    <p><b>Роль:</b> @ViewBag.Roles</p>
+    <p><b>Дата регистрации:</b> @Model.CreatedAt.ToString("dd.MM.yyyy HH:mm")</p>
+</div>

@@ -1,0 +1,379 @@
+@page "/todo"
+@inject TodoStorage Storage
+
+<PageTitle>Список задач (@ActiveCount)</PageTitle>
+
+<h1>Список задач</h1>
+
+@if (loading)
+{
+    <p class="muted">Загрузка задач...</p>
+}
+else
+{
+    @* ---------- добавление ---------- *@
+    <div class="add-card">
+        <input class="add-title" placeholder="Что нужно сделать?" maxlength="200"
+               @bind="newTitle" @bind:event="oninput" @onkeydown="OnAddKeyDown" />
+
+        <select @bind="newPriority" title="Приоритет">
+            @foreach (var p in Enum.GetValues<Priority>())
+            {
+                <option value="@p">@PriorityName(p)</option>
+            }
+        </select>
+
+        <input type="date" @bind="newDueDate" title="Срок" />
+
+        <button class="btn" @onclick="AddAsync" disabled="@string.IsNullOrWhiteSpace(newTitle)">Добавить</button>
+    </div>
+
+    @* ---------- статистика ---------- *@
+    <div class="stats">
+        <div class="stat"><b>@items.Count</b><span>всего</span></div>
+        <div class="stat"><b>@ActiveCount</b><span>активных</span></div>
+        <div class="stat"><b>@DoneCount</b><span>выполнено</span></div>
+        <div class="stat warn"><b>@OverdueCount</b><span>просрочено</span></div>
+
+        <div class="progress-box">
+            <div class="progress">
+                <div class="progress-bar" style="width: @(Percent)%"></div>
+            </div>
+            <span>@Percent% выполнено</span>
+        </div>
+    </div>
+
+    @* ---------- фильтры ---------- *@
+    <div class="toolbar">
+        <div class="filters">
+            <button class="@(filter == TodoFilter.All ? "active" : "")" @onclick="() => filter = TodoFilter.All">Все (@items.Count)</button>
+            <button class="@(filter == TodoFilter.Active ? "active" : "")" @onclick="() => filter = TodoFilter.Active">Активные (@ActiveCount)</button>
+            <button class="@(filter == TodoFilter.Done ? "active" : "")" @onclick="() => filter = TodoFilter.Done">Выполненные (@DoneCount)</button>
+        </div>
+
+        <input class="search" type="search" placeholder="Поиск..." @bind="search" @bind:event="oninput" />
+
+        <select @bind="sort" title="Сортировка">
+            <option value="@TodoSort.Newest">Сначала новые</option>
+            <option value="@TodoSort.Priority">По приоритету</option>
+            <option value="@TodoSort.DueDate">По сроку</option>
+            <option value="@TodoSort.Title">По названию</option>
+        </select>
+    </div>
+
+    @* ---------- уведомление об удалении с отменой ---------- *@
+    @if (lastDeleted != null)
+    {
+        <div class="undo">
+            Задача «@lastDeleted.Title» удалена.
+            <button class="link" @onclick="UndoDeleteAsync">Отменить</button>
+        </div>
+    }
+
+    @* ---------- список ---------- *@
+    @if (items.Count == 0)
+    {
+        <div class="empty">Задач пока нет. Добавьте первую!</div>
+    }
+    else if (!Visible.Any())
+    {
+        <div class="empty">Ничего не найдено</div>
+    }
+    else
+    {
+        <ul class="todo-list">
+            @foreach (var item in Visible)
+            {
+                <li @key="item.Id" class="todo-item @(item.IsDone ? "done" : "") @(IsOverdue(item) ? "overdue" : "")">
+                    <input type="checkbox" checked="@item.IsDone" @onchange="() => ToggleAsync(item)" />
+
+                    <div class="todo-body">
+                        @if (editingId == item.Id)
+                        {
+                            <input class="edit-input" @ref="editInput"
+                                   @bind="editTitle" @bind:event="oninput"
+                                   @onkeydown="e => OnEditKeyDown(e, item)"
+                                   @onblur="() => SaveEditAsync(item)" />
+                        }
+                        else
+                        {
+                            <span class="todo-title" title="Двойной клик для редактирования"
+                                  @ondblclick="() => StartEdit(item)">@item.Title</span>
+                        }
+
+                        <div class="meta">
+                            <span class="badge @PriorityCss(item.Priority)" title="Нажмите, чтобы сменить приоритет"
+                                  @onclick="() => CyclePriorityAsync(item)">@PriorityName(item.Priority)</span>
+
+                            @if (item.DueDate != null)
+                            {
+                                <span class="due">📅 @item.DueDate.Value.ToString("dd.MM.yyyy") @DueText(item)</span>
+                            }
+
+                            @if (item.IsDone && item.CompletedAt != null)
+                            {
+                                <span class="muted">выполнено @item.CompletedAt.Value.ToString("dd.MM HH:mm")</span>
+                            }
+                        </div>
+                    </div>
+
+                    <button class="icon" title="Изменить" @onclick="() => StartEdit(item)">✎</button>
+                    <button class="icon danger" title="Удалить" @onclick="() => DeleteAsync(item)">✕</button>
+                </li>
+            }
+        </ul>
+    }
+
+    @* ---------- массовые действия ---------- *@
+    @if (items.Count > 0)
+    {
+        <div class="bulk">
+            <button class="btn secondary" @onclick="ToggleAllAsync">
+                @(ActiveCount > 0 ? "Отметить все выполненными" : "Снять отметки со всех")
+            </button>
+            <button class="btn secondary" @onclick="ClearDoneAsync" disabled="@(DoneCount == 0)">
+                Удалить выполненные (@DoneCount)
+            </button>
+        </div>
+    }
+}
+
+@code {
+    private List<TodoItem> items = new();
+    private bool loading = true;
+
+    // новая задача
+    private string newTitle = "";
+    private Priority newPriority = Priority.Medium;
+    private DateOnly? newDueDate;
+
+    // фильтр, поиск, сортировка
+    private TodoFilter filter = TodoFilter.All;
+    private string search = "";
+    private TodoSort sort = TodoSort.Newest;
+
+    // редактирование
+    private Guid? editingId;
+    private string editTitle = "";
+    private ElementReference editInput;
+    private bool focusEdit;
+
+    // для отмены удаления
+    private TodoItem? lastDeleted;
+    private int lastDeletedIndex;
+
+    private DateOnly Today => DateOnly.FromDateTime(DateTime.Today);
+
+    private int ActiveCount => items.Count(i => !i.IsDone);
+    private int DoneCount => items.Count(i => i.IsDone);
+    private int OverdueCount => items.Count(IsOverdue);
+    private int Percent => items.Count == 0 ? 0 : DoneCount * 100 / items.Count;
+
+    // что показываем с учетом фильтра, поиска и сортировки
+    private IEnumerable<TodoItem> Visible
+    {
+        get
+        {
+            IEnumerable<TodoItem> query = filter switch
+            {
+                TodoFilter.Active => items.Where(i => !i.IsDone),
+                TodoFilter.Done => items.Where(i => i.IsDone),
+                _ => items
+            };
+
+            if (!string.IsNullOrWhiteSpace(search))
+                query = query.Where(i => i.Title.Contains(search.Trim(), StringComparison.OrdinalIgnoreCase));
+
+            // выполненные всегда внизу
+            var ordered = query.OrderBy(i => i.IsDone);
+
+            ordered = sort switch
+            {
+                TodoSort.Priority => ordered.ThenByDescending(i => i.Priority).ThenByDescending(i => i.CreatedAt),
+                TodoSort.DueDate => ordered.ThenBy(i => i.DueDate == null).ThenBy(i => i.DueDate),
+                TodoSort.Title => ordered.ThenBy(i => i.Title),
+                _ => ordered.ThenByDescending(i => i.CreatedAt)
+            };
+
+            return ordered;
+        }
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        items = await Storage.LoadAsync();
+        loading = false;
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        // ставим курсор в поле редактирования
+        if (focusEdit)
+        {
+            focusEdit = false;
+            await editInput.FocusAsync();
+        }
+    }
+
+    // ---------- добавление ----------
+
+    private async Task OnAddKeyDown(KeyboardEventArgs e)
+    {
+        if (e.Key == "Enter")
+            await AddAsync();
+    }
+
+    private async Task AddAsync()
+    {
+        string title = newTitle.Trim();
+        if (title.Length == 0)
+            return;
+
+        items.Add(new TodoItem
+        {
+            Title = title,
+            Priority = newPriority,
+            DueDate = newDueDate,
+            CreatedAt = DateTime.Now
+        });
+
+        newTitle = "";
+        newDueDate = null;
+        newPriority = Priority.Medium;
+
+        // чтобы новая задача точно была видна
+        if (filter == TodoFilter.Done)
+            filter = TodoFilter.All;
+
+        await SaveAsync();
+    }
+
+    // ---------- изменение ----------
+
+    private async Task ToggleAsync(TodoItem item)
+    {
+        item.IsDone = !item.IsDone;
+        item.CompletedAt = item.IsDone ? DateTime.Now : null;
+        await SaveAsync();
+    }
+
+    private async Task CyclePriorityAsync(TodoItem item)
+    {
+        item.Priority = item.Priority switch
+        {
+            Priority.Low => Priority.Medium,
+            Priority.Medium => Priority.High,
+            _ => Priority.Low
+        };
+        await SaveAsync();
+    }
+
+    private void StartEdit(TodoItem item)
+    {
+        editingId = item.Id;
+        editTitle = item.Title;
+        focusEdit = true;
+    }
+
+    private async Task OnEditKeyDown(KeyboardEventArgs e, TodoItem item)
+    {
+        if (e.Key == "Enter")
+            await SaveEditAsync(item);
+        else if (e.Key == "Escape")
+            editingId = null;
+    }
+
+    private async Task SaveEditAsync(TodoItem item)
+    {
+        // защита от повторного вызова (Enter, потом blur)
+        if (editingId != item.Id)
+            return;
+
+        string title = editTitle.Trim();
+        editingId = null;
+
+        // пустое название не сохраняем
+        if (title.Length == 0 || title == item.Title)
+            return;
+
+        item.Title = title;
+        await SaveAsync();
+    }
+
+    // ---------- удаление ----------
+
+    private async Task DeleteAsync(TodoItem item)
+    {
+        lastDeletedIndex = items.IndexOf(item);
+        lastDeleted = item;
+        items.Remove(item);
+        await SaveAsync();
+    }
+
+    private async Task UndoDeleteAsync()
+    {
+        if (lastDeleted == null)
+            return;
+
+        items.Insert(Math.Min(lastDeletedIndex, items.Count), lastDeleted);
+        lastDeleted = null;
+        await SaveAsync();
+    }
+
+    private async Task ToggleAllAsync()
+    {
+        bool markDone = ActiveCount > 0;
+        foreach (var item in items)
+        {
+            if (item.IsDone != markDone)
+            {
+                item.IsDone = markDone;
+                item.CompletedAt = markDone ? DateTime.Now : null;
+            }
+        }
+        await SaveAsync();
+    }
+
+    private async Task ClearDoneAsync()
+    {
+        items.RemoveAll(i => i.IsDone);
+        lastDeleted = null;
+        await SaveAsync();
+    }
+
+    private async Task SaveAsync()
+    {
+        await Storage.SaveAsync(items);
+    }
+
+    // ---------- вспомогательные ----------
+
+    private bool IsOverdue(TodoItem item) =>
+        !item.IsDone && item.DueDate != null && item.DueDate.Value < Today;
+
+    private string DueText(TodoItem item)
+    {
+        if (item.IsDone || item.DueDate == null)
+            return "";
+
+        int days = item.DueDate.Value.DayNumber - Today.DayNumber;
+        if (days < 0) return $"(просрочено на {-days} дн.)";
+        if (days == 0) return "(сегодня)";
+        if (days == 1) return "(завтра)";
+        return $"(через {days} дн.)";
+    }
+
+    private static string PriorityName(Priority p) => p switch
+    {
+        Priority.High => "Высокий",
+        Priority.Low => "Низкий",
+        _ => "Средний"
+    };
+
+    private static string PriorityCss(Priority p) => p switch
+    {
+        Priority.High => "high",
+        Priority.Low => "low",
+        _ => "medium"
+    };
+}

@@ -1,0 +1,22 @@
+{
+  "version": 2,
+  "dgSpecHash": "PvNEQXa6hAllUxUsVNSZe6He3/9tXzf/SOLrVi0i4nYMbPIuJ+kcUU8zldeMba/VrRHH3MXttwXtObaMpzxAkw==",
+  "success": true,
+  "projectFilePath": "C:\\Users\\MRXGAMERS\\Desktop\\пересдачи\\asp.net\\кт18\\SalesApp\\SalesApp\\SalesCharts\\SalesCharts.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\MRXGAMERS\\.nuget\\packages\\microsoft.aspnetcore.authorization\\7.0.11\\microsoft.aspnetcore.authorization.7.0.11.nupkg.sha512",
+    "C:\\Users\\MRXGAMERS\\.nuget\\packages\\microsoft.aspnetcore.components\\7.0.11\\microsoft.aspnetcore.components.7.0.11.nupkg.sha512",
+    "C:\\Users\\MRXGAMERS\\.nuget\\packages\\microsoft.aspnetcore.components.analyzers\\7.0.11\\microsoft.aspnetcore.components.analyzers.7.0.11.nupkg.sha512",
+    "C:\\Users\\MRXGAMERS\\.nuget\\packages\\microsoft.aspnetcore.components.forms\\7.0.11\\microsoft.aspnetcore.components.forms.7.0.11.nupkg.sha512",
+    "C:\\Users\\MRXGAMERS\\.nuget\\packages\\microsoft.aspnetcore.components.web\\7.0.11\\microsoft.aspnetcore.components.web.7.0.11.nupkg.sha512",
+    "C:\\Users\\MRXGAMERS\\.nuget\\packages\\microsoft.aspnetcore.metadata\\7.0.11\\microsoft.aspnetcore.metadata.7.0.11.nupkg.sha512",
+    "C:\\Users\\MRXGAMERS\\.nuget\\packages\\microsoft.extensions.dependencyinjection\\7.0.0\\microsoft.extensions.dependencyinjection.7.0.0.nupkg.sha512",
+    "C:\\Users\\MRXGAMERS\\.nuget\\packages\\microsoft.extensions.dependencyinjection.abstractions\\7.0.0\\microsoft.extensions.dependencyinjection.abstractions.7.0.0.nupkg.sha512",
+    "C:\\Users\\MRXGAMERS\\.nuget\\packages\\microsoft.extensions.logging.abstractions\\7.0.1\\microsoft.extensions.logging.abstractions.7.0.1.nupkg.sha512",
+    "C:\\Users\\MRXGAMERS\\.nuget\\packages\\microsoft.extensions.options\\7.0.1\\microsoft.extensions.options.7.0.1.nupkg.sha512",
+    "C:\\Users\\MRXGAMERS\\.nuget\\packages\\microsoft.extensions.primitives\\7.0.0\\microsoft.extensions.primitives.7.0.0.nupkg.sha512",
+    "C:\\Users\\MRXGAMERS\\.nuget\\packages\\microsoft.jsinterop\\7.0.11\\microsoft.jsinterop.7.0.11.nupkg.sha512",
+    "C:\\Users\\MRXGAMERS\\.nuget\\packages\\system.io.pipelines\\7.0.0\\system.io.pipelines.7.0.0.nupkg.sha512"
+  ],
+  "logs": []
+}

@@ -1,0 +1,22 @@
+@inherits LocalizedComponentBase
+@inject DataService Data
+@inject NavigationManager Nav
+
+<div class="grid">
+    @foreach (var p in Data.GetProducts())
+    {
+        <div class="item-card">
+            <span class="tag">@L["cat_" + p.Category]</span>
+            <h3>@L.Pick(p.NameRu, p.NameEn)</h3>
+            <p class="price">@L.Money(p.Price)</p>
+            <button @onclick="() => Open(p.Id)">@L["open"]</button>
+        </div>
+    }
+</div>
+
+@code {
+    private void Open(int id)
+    {
+        Nav.NavigateTo($"/details/{id}");
+    }
+}

@@ -1,0 +1,19 @@
+@page "/error-test"
+@inherits LocalizedComponentBase
+@inject NavigationManager Nav
+
+<p class="info">@L["error_text"]</p>
+
+<div class="buttons">
+    <button class="danger" @onclick="Throw">@L["throw"]</button>
+    <button class="nav-btn" @onclick="GoHome">@L["go_home"]</button>
+</div>
+
+@code {
+    private void Throw()
+    {
+        throw new InvalidOperationException(L["error_message"]);
+    }
+
+    private void GoHome() => Nav.NavigateTo("/");
+}

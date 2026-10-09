@@ -1,0 +1,25 @@
+@model UserFormViewModel
+@{
+    ViewData["Title"] = "Редактирование";
+}
+
+<h1>Редактирование пользователя</h1>
+
+<form asp-action="Edit" asp-route-id="@Model.Id" method="post" novalidate>
+    <div class="card form-card">
+        <label asp-for="Username"></label>
+        <input asp-for="Username" />
+        <span asp-validation-for="Username" class="field-error"></span>
+
+        <label asp-for="Email"></label>
+        <input asp-for="Email" />
+        <span asp-validation-for="Email" class="field-error"></span>
+
+        <p class="muted">Профиль редактируется отдельно на странице пользователя.</p>
+    </div>
+
+    <div class="buttons">
+        <button type="submit">Сохранить</button>
+        <a class="btn secondary" asp-action="Details" asp-route-id="@Model.Id">Отмена</a>
+    </div>
+</form>

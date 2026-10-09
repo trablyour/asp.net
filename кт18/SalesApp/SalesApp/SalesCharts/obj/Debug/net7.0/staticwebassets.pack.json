@@ -1,0 +1,25 @@
+{
+  "Files": [
+    {
+      "Id": "C:\\Users\\MRXGAMERS\\Desktop\\пересдачи\\asp.net\\кт18\\SalesApp\\SalesApp\\SalesCharts\\wwwroot\\salescharts.css",
+      "PackagePath": "staticwebassets\\salescharts.css"
+    },
+    {
+      "Id": "obj\\Debug\\net7.0\\staticwebassets\\msbuild.SalesCharts.Microsoft.AspNetCore.StaticWebAssets.props",
+      "PackagePath": "build\\Microsoft.AspNetCore.StaticWebAssets.props"
+    },
+    {
+      "Id": "obj\\Debug\\net7.0\\staticwebassets\\msbuild.build.SalesCharts.props",
+      "PackagePath": "build\\SalesCharts.props"
+    },
+    {
+      "Id": "obj\\Debug\\net7.0\\staticwebassets\\msbuild.buildMultiTargeting.SalesCharts.props",
+      "PackagePath": "buildMultiTargeting\\SalesCharts.props"
+    },
+    {
+      "Id": "obj\\Debug\\net7.0\\staticwebassets\\msbuild.buildTransitive.SalesCharts.props",
+      "PackagePath": "buildTransitive\\SalesCharts.props"
+    }
+  ],
+  "ElementsToRemove": []
+}

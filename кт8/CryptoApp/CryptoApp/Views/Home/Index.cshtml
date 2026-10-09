@@ -1,0 +1,70 @@
+@model CryptoViewModel
+@{
+    ViewData["Title"] = "Шифрование";
+}
+
+<h1>Шифрование и дешифрование текста</h1>
+
+@if (Model.Error != null)
+{
+    <div class="alert error">@Model.Error</div>
+}
+@if (Model.Message != null)
+{
+    <div class="alert success">@Model.Message</div>
+}
+
+<form asp-action="Index" method="post">
+
+    <div class="card">
+        <div class="row">
+            <label class="inline">
+                Алгоритм
+                <select asp-for="Algorithm" id="algorithm">
+                    <option value="AES">AES (симметричный)</option>
+                    <option value="RSA">RSA (асимметричный)</option>
+                </select>
+            </label>
+
+            <button type="submit" name="command" value="generate" class="secondary">Сгенерировать ключ</button>
+        </div>
+
+        <div id="aes-keys">
+            <label>Ключ AES (Base64, 16, 24 или 32 байта)</label>
+            <input asp-for="AesKey" placeholder="можно оставить пустым, ключ сгенерируется при шифровании" />
+            <p class="hint">Для каждого шифрования генерируется случайный вектор инициализации (IV), он записывается в начало результата.</p>
+        </div>
+
+        <div id="rsa-keys">
+            <label>Открытый ключ (используется для шифрования)</label>
+            <textarea asp-for="RsaPublicKey" rows="5" class="mono"></textarea>
+
+            <label>Закрытый ключ (используется для расшифровки)</label>
+            <textarea asp-for="RsaPrivateKey" rows="8" class="mono"></textarea>
+            <p class="hint">RSA подходит только для коротких текстов (до 190 байт при ключе 2048 бит).</p>
+        </div>
+    </div>
+
+    <div class="columns">
+        <div class="card">
+            <h2>Шифрование</h2>
+            <label>Исходный текст</label>
+            <textarea asp-for="PlainText" rows="6"></textarea>
+            <button type="submit" name="command" value="encrypt">Зашифровать</button>
+        </div>
+
+        <div class="card">
+            <h2>Дешифрование</h2>
+            <label>Зашифрованный текст (Base64)</label>
+            <textarea asp-for="CipherText" rows="6" class="mono"></textarea>
+            <button type="submit" name="command" value="decrypt">Расшифровать</button>
+
+            <label>Результат расшифровки</label>
+            <textarea asp-for="DecryptedText" rows="4" readonly></textarea>
+        </div>
+    </div>
+</form>
+
+@section Scripts {
+    <script src="~/js/site.js" asp-append-version="true"></script>
+}

@@ -1,0 +1,13 @@
+@model CryptoViewModel
+@{
+    ViewData["Title"] = "libsodium";
+}
+
+<h1>libsodium: secretbox</h1>
+<p class="info">
+    Алгоритм: <b>XSalsa20-Poly1305</b> (функция crypto_secretbox). Ключ 32 байта, nonce 24 байта
+    генерируется случайно и записывается в начало результата. Poly1305 проверяет целостность,
+    поэтому подмена ключа или данных приводит к ошибке.
+</p>
+
+<partial name="_CryptoForm" model="Model" />

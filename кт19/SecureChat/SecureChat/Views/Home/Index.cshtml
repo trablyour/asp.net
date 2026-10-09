@@ -1,0 +1,37 @@
+@{
+    ViewData["Title"] = "Главная";
+}
+
+<div class="hero">
+    <h1>Защищенный чат на SignalR</h1>
+    <p>Сообщения доставляются в реальном времени. Доступ к чату есть только у вошедших пользователей.</p>
+
+    @if (User.Identity?.IsAuthenticated == true)
+    {
+        <p>Вы вошли как <b>@User.Identity.Name</b>.</p>
+        <a class="btn" asp-controller="Chat" asp-action="Index">Перейти в чат →</a>
+    }
+    else
+    {
+        <div class="buttons">
+            <a class="btn" asp-controller="Account" asp-action="Login">Войти</a>
+            <a class="btn secondary" asp-controller="Account" asp-action="Register">Зарегистрироваться</a>
+        </div>
+        <p class="muted">Попробуйте открыть <a asp-controller="Chat" asp-action="Index">чат</a> без входа: сайт перенаправит на страницу входа.</p>
+    }
+</div>
+
+<div class="features">
+    <div class="feature">
+        <b>Куки-аутентификация</b>
+        <span>После входа сервер выдает защищенную HttpOnly-куку с данными пользователя.</span>
+    </div>
+    <div class="feature">
+        <b>Хэширование паролей</b>
+        <span>Пароли хранятся в базе только в виде хэша (PasswordHasher).</span>
+    </div>
+    <div class="feature">
+        <b>Закрытый хаб</b>
+        <span>Хаб SignalR помечен [Authorize]: без входа подключиться к нему нельзя.</span>
+    </div>
+</div>

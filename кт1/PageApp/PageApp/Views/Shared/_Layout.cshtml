@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - PageApp</title>
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+</head>
+<body>
+    <header>
+        @Html.Partial("_Navigation")
+    </header>
+
+    <main class="content">
+        @RenderBody()
+    </main>
+
+    <footer class="footer">
+        &copy; @DateTime.Now.Year - PageApp
+    </footer>
+</body>
+</html>

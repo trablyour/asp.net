@@ -1,0 +1,44 @@
+@model List<Student>
+@{
+    ViewData["Title"] = "Студенты";
+    string? selected = ViewBag.Group;
+}
+
+<div class="page-head">
+    <h1>Студенты</h1>
+    <a class="btn" asp-action="Create">+ Добавить</a>
+</div>
+
+<form asp-action="Index" method="get" class="filters">
+    <select name="group">
+        <option value="">Все группы</option>
+        @foreach (string g in ViewBag.Groups)
+        {
+            <option value="@g" selected="@(g == selected)">@g</option>
+        }
+    </select>
+    <button type="submit">Показать</button>
+</form>
+
+<div class="table-wrap">
+    <table class="table">
+        <thead>
+            <tr><th>ФИО</th><th>Группа</th><th>Email</th><th>Курсов</th><th></th></tr>
+        </thead>
+        <tbody>
+            @foreach (var s in Model)
+            {
+                <tr>
+                    <td><a asp-action="Details" asp-route-id="@s.Id">@s.FullName</a></td>
+                    <td>@s.Group</td>
+                    <td>@s.Email</td>
+                    <td><span class="badge">@s.Enrollments.Count</span></td>
+                    <td class="actions">
+                        <a asp-action="Edit" asp-route-id="@s.Id">Изменить</a>
+                        <a class="danger" asp-action="Delete" asp-route-id="@s.Id">Удалить</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

@@ -1,0 +1,120 @@
+@inherits LayoutComponentBase
+@implements IDisposable
+@inject NavigationTracker Tracker
+@inject RouteTitleService Titles
+@inject LocalizationService L
+
+@* заголовок вкладки браузера тоже меняется *@
+<PageTitle>@title</PageTitle>
+
+<div class="layout">
+    <aside class="sidebar">
+        <div class="logo">@L["app_name"]</div>
+        <NavMenu />
+    </aside>
+
+    <div class="main">
+        <header class="header">
+            <div>
+                <h1>@title</h1>
+                <div class="route">@L["current_route"]: <code>@Tracker.CurrentPath</code></div>
+            </div>
+            <LanguageSwitcher />
+        </header>
+
+        <main class="content">
+            <ErrorBoundary @ref="errorBoundary">
+                <ChildContent>
+                    @Body
+                </ChildContent>
+                <ErrorContent Context="ex">
+                    <div class="error-box">
+                        <h2>@L["error_title"]</h2>
+                        <p><code>@ex.Message</code></p>
+                        <button @onclick="Recover">@L["error_recover"]</button>
+                    </div>
+                </ErrorContent>
+            </ErrorBoundary>
+        </main>
+    </div>
+</div>
+
+@* уведомления о переходах *@
+<div class="toasts">
+    @foreach (var toast in toasts)
+    {
+        <div class="toast" @key="toast.Id">@toast.Text</div>
+    }
+</div>
+
+@code {
+    private string title = "";
+    private ErrorBoundary? errorBoundary;
+    private readonly List<Toast> toasts = new();
+
+    protected override void OnInitialized()
+    {
+        title = Titles.GetTitle(Tracker.CurrentPath);
+
+        Tracker.RouteChanged += OnRouteChanged;
+        L.Changed += OnLanguageChanged;
+    }
+
+    private void OnRouteChanged(string path)
+    {
+        InvokeAsync(() =>
+        {
+            title = Titles.GetTitle(path);
+
+            // после ухода со страницы с ошибкой сбрасываем ErrorBoundary
+            errorBoundary?.Recover();
+
+            ShowToast($"{L["toast_navigated"]} {path}");
+            StateHasChanged();
+        });
+    }
+
+    private void OnLanguageChanged()
+    {
+        InvokeAsync(() =>
+        {
+            title = Titles.GetTitle(Tracker.CurrentPath);
+            StateHasChanged();
+        });
+    }
+
+    private void ShowToast(string text)
+    {
+        var toast = new Toast { Text = text };
+        toasts.Add(toast);
+        _ = RemoveLater(toast);
+    }
+
+    private async Task RemoveLater(Toast toast)
+    {
+        await Task.Delay(3000);
+        try
+        {
+            await InvokeAsync(() =>
+            {
+                toasts.Remove(toast);
+                StateHasChanged();
+            });
+        }
+        catch (ObjectDisposedException)
+        {
+            // пользователь закрыл вкладку, пока висело уведомление
+        }
+    }
+
+    private void Recover()
+    {
+        errorBoundary?.Recover();
+    }
+
+    public void Dispose()
+    {
+        Tracker.RouteChanged -= OnRouteChanged;
+        L.Changed -= OnLanguageChanged;
+    }
+}

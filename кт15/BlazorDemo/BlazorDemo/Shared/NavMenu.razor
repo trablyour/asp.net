@@ -1,0 +1,11 @@
+@inherits LocalizedComponentBase
+
+<nav class="nav">
+    <NavLink href="" Match="NavLinkMatch.All">@L["menu_home"]</NavLink>
+    <NavLink href="products">@L["menu_products"]</NavLink>
+    <NavLink href="catalog/products">@L["menu_catalog_products"]</NavLink>
+    <NavLink href="catalog/services">@L["menu_catalog_services"]</NavLink>
+    <NavLink href="details/1">@L["menu_details"]</NavLink>
+    <NavLink href="error-test">@L["menu_error"]</NavLink>
+    <NavLink href="this-page-does-not-exist" class="broken">@L["menu_broken"]</NavLink>
+</nav>

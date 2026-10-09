@@ -1,0 +1,43 @@
+@model UserFormViewModel
+@{
+    ViewData["Title"] = "Новый пользователь";
+}
+
+<h1>Новый пользователь</h1>
+
+<form asp-action="Create" method="post" novalidate>
+    <div class="card form-card">
+        <h2>Пользователь</h2>
+
+        <label asp-for="Username"></label>
+        <input asp-for="Username" />
+        <span asp-validation-for="Username" class="field-error"></span>
+
+        <label asp-for="Email"></label>
+        <input asp-for="Email" />
+        <span asp-validation-for="Email" class="field-error"></span>
+
+        <label class="checkbox">
+            <input asp-for="CreateProfile" id="createProfile" /> Сразу создать профиль
+        </label>
+    </div>
+
+    <div class="card form-card" id="profileBlock">
+        <h2>Профиль</h2>
+        <partial name="_ProfileFields" for="Profile" />
+    </div>
+
+    <div class="buttons">
+        <button type="submit">Создать</button>
+        <a class="btn secondary" asp-action="Index">Отмена</a>
+    </div>
+</form>
+
+<script>
+    // прячем блок профиля, если галочка снята
+    const check = document.getElementById('createProfile');
+    const block = document.getElementById('profileBlock');
+    function toggle() { block.style.display = check.checked ? 'block' : 'none'; }
+    check.addEventListener('change', toggle);
+    toggle();
+</script>

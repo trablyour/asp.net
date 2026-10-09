@@ -1,0 +1,32 @@
+@{
+    ViewData["Title"] = "Главная";
+}
+
+<h1>Панель администратора</h1>
+<p class="muted">Выберите раздел в меню слева.</p>
+
+<div class="stats">
+    <div class="stat">
+        <span class="stat-value">@ViewBag.UsersCount</span>
+        <span class="stat-label">Всего пользователей</span>
+    </div>
+    <div class="stat">
+        <span class="stat-value">@ViewBag.AdminsCount</span>
+        <span class="stat-label">Администраторов</span>
+    </div>
+</div>
+
+<div class="tiles">
+    <a class="tile" asp-controller="Users" asp-action="Index">
+        <b>Пользователи</b>
+        <span>Просмотр, добавление, редактирование и удаление</span>
+    </a>
+    <a class="tile" asp-controller="Settings" asp-action="Index">
+        <b>Настройки</b>
+        <span>Название сайта и регистрация</span>
+    </a>
+    <a class="tile" asp-controller="Reports" asp-action="Index">
+        <b>Отчеты</b>
+        <span>Статистика по пользователям</span>
+    </a>
+</div>

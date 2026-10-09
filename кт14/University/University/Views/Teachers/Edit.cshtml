@@ -1,0 +1,14 @@
+@model TeacherFormViewModel
+@{
+    ViewData["Title"] = "Редактирование преподавателя";
+}
+
+<h1>Редактирование преподавателя</h1>
+
+<form asp-action="Edit" asp-route-id="@Model.Id" method="post" novalidate>
+    <div class="card form-card"><partial name="_Form" model="Model" /></div>
+    <div class="buttons">
+        <button type="submit">Сохранить</button>
+        <a class="btn secondary" asp-action="Details" asp-route-id="@Model.Id">Отмена</a>
+    </div>
+</form>

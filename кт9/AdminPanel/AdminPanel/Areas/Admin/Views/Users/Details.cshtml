@@ -1,0 +1,18 @@
+@model ApplicationUser
+@{
+    ViewData["Title"] = "Пользователь";
+}
+
+<h1>@Model.FullName</h1>
+
+<div class="card narrow">
+    <p><b>Email:</b> @Model.Email</p>
+    <p><b>Роль:</b> @ViewBag.Roles</p>
+    <p><b>Дата регистрации:</b> @Model.CreatedAt.ToString("dd.MM.yyyy HH:mm")</p>
+    <p><b>Id:</b> <code>@Model.Id</code></p>
+</div>
+
+<div class="buttons">
+    <a class="btn" asp-action="Edit" asp-route-id="@Model.Id">Изменить</a>
+    <a class="btn secondary" asp-action="Index">Назад к списку</a>
+</div>

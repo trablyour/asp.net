@@ -1,0 +1,37 @@
+{
+  "Version": 1,
+  "Hash": "P6/izklFTTr3fvBjiXRa0taPL6znl8W/4riodLcWQwA=",
+  "Source": "SalesCharts",
+  "BasePath": "_content/SalesCharts",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [
+    {
+      "Name": "SalesCharts\\wwwroot",
+      "Source": "SalesCharts",
+      "ContentRoot": "C:\\Users\\MRXGAMERS\\Desktop\\пересдачи\\asp.net\\кт18\\SalesApp\\SalesApp\\SalesCharts\\wwwroot\\",
+      "BasePath": "_content/SalesCharts",
+      "Pattern": "**"
+    }
+  ],
+  "Assets": [
+    {
+      "Identity": "C:\\Users\\MRXGAMERS\\Desktop\\пересдачи\\asp.net\\кт18\\SalesApp\\SalesApp\\SalesCharts\\wwwroot\\salescharts.css",
+      "SourceId": "SalesCharts",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\MRXGAMERS\\Desktop\\пересдачи\\asp.net\\кт18\\SalesApp\\SalesApp\\SalesCharts\\wwwroot\\",
+      "BasePath": "_content/SalesCharts",
+      "RelativePath": "salescharts.css",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\salescharts.css"
+    }
+  ]
+}

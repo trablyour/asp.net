@@ -1,0 +1,113 @@
+@page "/sales/products"
+@inject NavigationManager Nav
+
+<PageTitle>Продажи по товарам</PageTitle>
+
+<h1>Продажи по товарам</h1>
+<p class="sc-note">Тоже страница из отложенной сборки <code>SalesCharts</code>. Повторно сборка уже не скачивается.</p>
+
+<div class="sc-toolbar">
+    <div class="sc-segment">
+        @foreach (var p in Periods)
+        {
+            <button class="@(period == p.Key ? "active" : "")" @onclick="() => SetPeriod(p.Key)">@p.Value</button>
+        }
+    </div>
+    <button class="sc-btn secondary" @onclick="Regenerate">↻ Новые данные</button>
+</div>
+
+<div class="sc-two">
+    <PieChartComponent Data="byProduct" Colors="Colors" Title="Доля в выручке" />
+    <SalesChartComponent Series="barSeries" Type="ChartType.Bar" PointColors="Colors"
+                         Title="Выручка по товарам" ShowLegend="false" Height="300" />
+</div>
+
+<table class="sc-table">
+    <thead>
+        <tr>
+            <th>Товар</th>
+            <th>Выручка</th>
+            <th>Доля</th>
+            <th style="width:40%"></th>
+        </tr>
+    </thead>
+    <tbody>
+        @for (int i = 0; i < byProduct.Count; i++)
+        {
+            var item = byProduct[i];
+            double share = Total == 0 ? 0 : (double)(item.Value / Total) * 100;
+            <tr>
+                <td><i class="sc-dot" style="background:@Colors[i % Colors.Count]"></i>@item.Label</td>
+                <td>@ChartMath.Money(item.Value)</td>
+                <td>@ChartMath.Percent(share)</td>
+                <td>
+                    <div class="sc-share">
+                        <div style="width:@ChartMath.N(share)%; background:@Colors[i % Colors.Count]"></div>
+                    </div>
+                </td>
+            </tr>
+        }
+    </tbody>
+    <tfoot>
+        <tr>
+            <td>Итого</td>
+            <td>@ChartMath.Money(Total)</td>
+            <td>100%</td>
+            <td></td>
+        </tr>
+    </tfoot>
+</table>
+
+<div class="sc-footer">
+    <button class="sc-btn secondary" @onclick="Back">← К динамике продаж</button>
+</div>
+
+@code {
+    private static readonly Dictionary<SalesPeriod, string> Periods = new()
+    {
+        [SalesPeriod.Week] = "Неделя",
+        [SalesPeriod.Month] = "Месяц",
+        [SalesPeriod.Year] = "Год"
+    };
+
+    private static readonly List<string> Colors = new() { "#512bd4", "#1f9d6a", "#f59e0b", "#e1457a", "#0ea5e9" };
+
+    private SalesPeriod period = SalesPeriod.Month;
+    private int seed = 1;
+
+    private List<SalesPoint> byProduct = new();
+    private List<SalesSeries> barSeries = new();
+
+    private decimal Total => byProduct.Sum(p => p.Value);
+
+    protected override void OnInitialized()
+    {
+        Reload();
+    }
+
+    private void SetPeriod(SalesPeriod value)
+    {
+        period = value;
+        Reload();
+    }
+
+    private void Regenerate()
+    {
+        seed++;
+        Reload();
+    }
+
+    private void Reload()
+    {
+        byProduct = SalesDataGenerator.ByProduct(period, seed);
+        barSeries = new()
+        {
+            new SalesSeries { Name = "Выручка", Points = byProduct }
+        };
+    }
+
+    private void Back()
+    {
+        Nav.NavigateTo("/sales");
+    }
+}

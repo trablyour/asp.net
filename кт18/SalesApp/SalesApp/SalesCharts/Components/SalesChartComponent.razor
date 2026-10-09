@@ -1,0 +1,188 @@
+@* График продаж: линия, область или столбцы. Рисуется в SVG без сторонних библиотек. *@
+
+<div class="sc-chart">
+    @if (!string.IsNullOrEmpty(Title))
+    {
+        <div class="sc-title">@Title</div>
+    }
+
+    @if (!HasData)
+    {
+        <div class="sc-empty">Нет данных для отображения</div>
+    }
+    else
+    {
+        <svg class="sc-svg" viewBox="0 0 @Width @Height" preserveAspectRatio="xMidYMid meet"
+             @onmouseleave="() => hovered = null">
+
+            @* ---- сетка и подписи оси Y ---- *@
+            @for (int t = 0; t <= TickCount; t++)
+            {
+                decimal tickValue = maxY * t / TickCount;
+                double y = Y(tickValue);
+                @* <g> нужен, потому что голый <text> внутри блока кода Razor считает своим служебным тегом *@
+                <g>
+                    <line x1="@N(PadLeft)" y1="@N(y)" x2="@N(Width - PadRight)" y2="@N(y)" class="sc-grid" />
+                    <text x="@N(PadLeft - 8)" y="@N(y + 4)" class="sc-axis" text-anchor="end">@ChartMath.Short(tickValue)</text>
+                </g>
+            }
+
+            @* ---- подписи оси X (если точек много, показываем не все) ---- *@
+            @for (int i = 0; i < count; i++)
+            {
+                if (i % labelStep == 0 || i == count - 1)
+                {
+                    <g>
+                        <text x="@N(CenterX(i))" y="@N(Height - PadBottom + 20)" class="sc-axis" text-anchor="middle">@labels[i]</text>
+                    </g>
+                }
+            }
+
+            @* ---- подсветка столбца под курсором ---- *@
+            @if (hovered != null)
+            {
+                <rect x="@N(CenterX(hovered.Value) - Step / 2)" y="@N(PadTop)" width="@N(Step)" height="@N(PlotH)" class="sc-hover-band" />
+            }
+
+            @* ---- сами данные ---- *@
+            @if (Type == ChartType.Bar)
+            {
+                double groupW = Step * 0.7;
+                double barW = groupW / Series.Count;
+
+                @for (int s = 0; s < Series.Count; s++)
+                {
+                    var series = Series[s];
+                    @for (int i = 0; i < series.Points.Count && i < count; i++)
+                    {
+                        double x = CenterX(i) - groupW / 2 + s * barW;
+                        double y = Y(series.Points[i].Value);
+                        string color = PointColors != null && Series.Count == 1 ? PointColors[i % PointColors.Count] : series.Color;
+                        <rect x="@N(x + 1)" y="@N(y)" width="@N(Math.Max(barW - 2, 1))" height="@N(BaseY - y)" rx="3"
+                              fill="@color" class="sc-bar @(hovered == i ? "active" : "")" />
+                    }
+                }
+            }
+            else
+            {
+                @foreach (var series in Series)
+                {
+                    var pts = ToPoints(series);
+
+                    @if (Type == ChartType.Area)
+                    {
+                        <path d="@ChartMath.AreaPath(pts, BaseY)" fill="@series.Color" class="sc-area" />
+                    }
+
+                    <path d="@ChartMath.LinePath(pts)" stroke="@series.Color" class="sc-line" />
+
+                    @for (int i = 0; i < pts.Count; i++)
+                    {
+                        <circle cx="@N(pts[i].X)" cy="@N(pts[i].Y)" r="@(hovered == i ? "6" : "3.5")"
+                                fill="#fff" stroke="@series.Color" stroke-width="2" />
+                    }
+                }
+            }
+
+            @* ---- невидимые зоны для наведения мыши ---- *@
+            @for (int i = 0; i < count; i++)
+            {
+                int index = i;
+                <rect x="@N(CenterX(i) - Step / 2)" y="@N(PadTop)" width="@N(Step)" height="@N(PlotH)"
+                      fill="transparent" @onmouseover="() => hovered = index" />
+            }
+
+            @* ---- всплывающая подсказка ---- *@
+            @if (hovered != null)
+            {
+                int h = hovered.Value;
+                double boxW = 190;
+                double boxH = 30 + Series.Count * 20;
+                double boxX = CenterX(h) + 12;
+                if (boxX + boxW > Width - PadRight)
+                    boxX = CenterX(h) - boxW - 12;
+                double boxY = PadTop + 8;
+
+                <g class="sc-tooltip">
+                    <rect x="@N(boxX)" y="@N(boxY)" width="@N(boxW)" height="@N(boxH)" rx="6" />
+                    <text x="@N(boxX + 12)" y="@N(boxY + 20)" class="sc-tip-title">@labels[h]</text>
+                    @for (int s = 0; s < Series.Count; s++)
+                    {
+                        var series = Series[s];
+                        double ty = boxY + 40 + s * 20;
+                        <g>
+                            <circle cx="@N(boxX + 16)" cy="@N(ty - 4)" r="4" fill="@series.Color" />
+                            <text x="@N(boxX + 26)" y="@N(ty)" class="sc-tip-text">
+                                @(h < series.Points.Count ? ChartMath.Money(series.Points[h].Value) : "—")
+                            </text>
+                        </g>
+                    }
+                </g>
+            }
+        </svg>
+
+        @if (ShowLegend && Series.Count > 0)
+        {
+            <div class="sc-legend">
+                @foreach (var series in Series)
+                {
+                    <span><i style="background:@series.Color"></i>@series.Name</span>
+                }
+            </div>
+        }
+    }
+</div>
+
+@code {
+    [Parameter] public List<SalesSeries> Series { get; set; } = new();
+    [Parameter] public ChartType Type { get; set; } = ChartType.Line;
+    [Parameter] public string? Title { get; set; }
+    [Parameter] public int Height { get; set; } = 340;
+    [Parameter] public bool ShowLegend { get; set; } = true;
+
+    // цвета отдельных столбцов (для одной серии)
+    [Parameter] public List<string>? PointColors { get; set; }
+
+    private const int Width = 800;
+    private const int PadLeft = 64;
+    private const int PadRight = 20;
+    private const int PadTop = 16;
+    private const int PadBottom = 36;
+    private const int TickCount = 5;
+
+    private int? hovered;
+    private int count;
+    private int labelStep = 1;
+    private decimal maxY = 1;
+    private List<string> labels = new();
+
+    private bool HasData => Series.Count > 0 && count > 0;
+    private double PlotW => Width - PadLeft - PadRight;
+    private double PlotH => Height - PadTop - PadBottom;
+    private double BaseY => PadTop + PlotH;
+    private double Step => count == 0 ? 0 : PlotW / count;
+
+    // пересчитываем масштаб при каждом изменении данных
+    protected override void OnParametersSet()
+    {
+        count = Series.Count == 0 ? 0 : Series.Max(s => s.Points.Count);
+        labels = Series.OrderByDescending(s => s.Points.Count).FirstOrDefault()?.Points.Select(p => p.Label).ToList() ?? new();
+
+        decimal max = Series.SelectMany(s => s.Points).Select(p => p.Value).DefaultIfEmpty(0).Max();
+        maxY = ChartMath.NiceMax(max * 1.05m);
+
+        labelStep = Math.Max(1, (int)Math.Ceiling(count / 12.0));
+
+        if (hovered >= count)
+            hovered = null;
+    }
+
+    private double CenterX(int i) => PadLeft + Step * (i + 0.5);
+
+    private double Y(decimal value) => PadTop + PlotH - (double)(value / maxY) * PlotH;
+
+    private List<(double X, double Y)> ToPoints(SalesSeries series) =>
+        series.Points.Take(count).Select((p, i) => (CenterX(i), Y(p.Value))).ToList();
+
+    private static string N(double value) => ChartMath.N(value);
+}

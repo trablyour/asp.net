@@ -1,0 +1,51 @@
+@model ReportsViewModel
+@{
+    ViewData["Title"] = "Отчеты";
+}
+
+<h1>Отчеты</h1>
+
+<div class="stats">
+    <div class="stat">
+        <span class="stat-value">@Model.TotalUsers</span>
+        <span class="stat-label">Всего пользователей</span>
+    </div>
+    <div class="stat">
+        <span class="stat-value">@Model.AdminCount</span>
+        <span class="stat-label">Администраторов</span>
+    </div>
+    <div class="stat">
+        <span class="stat-value">@Model.UserCount</span>
+        <span class="stat-label">Обычных пользователей</span>
+    </div>
+    <div class="stat">
+        <span class="stat-value">@Model.NewLast7Days</span>
+        <span class="stat-label">Новых за 7 дней</span>
+    </div>
+</div>
+
+<h2>Последние регистрации</h2>
+
+<div class="table-wrap">
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Имя</th>
+                <th>Email</th>
+                <th>Роль</th>
+                <th>Дата</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var user in Model.LatestUsers)
+            {
+                <tr>
+                    <td>@user.FullName</td>
+                    <td>@user.Email</td>
+                    <td>@user.Roles</td>
+                    <td>@user.CreatedAt.ToString("dd.MM.yyyy HH:mm")</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

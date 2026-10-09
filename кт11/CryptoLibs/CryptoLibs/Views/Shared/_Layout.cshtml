@@ -1,0 +1,26 @@
+@{
+    string current = ViewContext.RouteData.Values["controller"]?.ToString() ?? "";
+}
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - CryptoLibs</title>
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+</head>
+<body>
+    <header class="topbar">
+        <span class="brand">CryptoLibs</span>
+        <nav>
+            <a class="@(current == "Home" ? "active" : "")" asp-controller="Home" asp-action="Index">Главная</a>
+            <a class="@(current == "BouncyCastle" ? "active" : "")" asp-controller="BouncyCastle" asp-action="Index">Bouncy Castle (AES)</a>
+            <a class="@(current == "Sodium" ? "active" : "")" asp-controller="Sodium" asp-action="Index">libsodium</a>
+        </nav>
+    </header>
+
+    <main class="page">
+        @RenderBody()
+    </main>
+</body>
+</html>

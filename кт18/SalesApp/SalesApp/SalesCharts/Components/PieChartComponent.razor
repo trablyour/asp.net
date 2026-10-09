@@ -1,0 +1,83 @@
+@* Кольцевая диаграмма долей *@
+
+<div class="sc-chart">
+    @if (!string.IsNullOrEmpty(Title))
+    {
+        <div class="sc-title">@Title</div>
+    }
+
+    @if (total <= 0)
+    {
+        <div class="sc-empty">Нет данных для отображения</div>
+    }
+    else
+    {
+        <div class="sc-pie">
+            <svg viewBox="0 0 240 240" class="sc-pie-svg" @onmouseleave="() => hovered = null">
+                @{
+                    double start = -Math.PI / 2;
+                }
+                @for (int i = 0; i < Data.Count; i++)
+                {
+                    int index = i;
+                    double sweep = (double)(Data[i].Value / total) * 2 * Math.PI;
+                    double end = start + sweep;
+                    double outer = hovered == i ? 112 : 104;
+
+                    <path d="@ChartMath.ArcPath(120, 120, outer, 64, start, end)" fill="@ColorAt(i)"
+                          class="sc-pie-seg" @onmouseover="() => hovered = index" />
+
+                    start = end;
+                }
+
+                @if (hovered != null)
+                {
+                    var item = Data[hovered.Value];
+                    <g>
+                        <text x="120" y="112" class="sc-pie-label" text-anchor="middle">@item.Label</text>
+                        <text x="120" y="134" class="sc-pie-value" text-anchor="middle">@ChartMath.Percent(Share(item))</text>
+                    </g>
+                }
+                else
+                {
+                    <g>
+                        <text x="120" y="112" class="sc-pie-label" text-anchor="middle">Всего</text>
+                        <text x="120" y="134" class="sc-pie-value" text-anchor="middle">@ChartMath.Short(total)</text>
+                    </g>
+                }
+            </svg>
+
+            <ul class="sc-pie-legend">
+                @for (int i = 0; i < Data.Count; i++)
+                {
+                    int index = i;
+                    <li class="@(hovered == i ? "active" : "")" @onmouseover="() => hovered = index" @onmouseout="() => hovered = null">
+                        <i style="background:@ColorAt(i)"></i>
+                        <span class="name">@Data[i].Label</span>
+                        <span class="pct">@ChartMath.Percent(Share(Data[i]))</span>
+                    </li>
+                }
+            </ul>
+        </div>
+    }
+</div>
+
+@code {
+    [Parameter] public List<SalesPoint> Data { get; set; } = new();
+    [Parameter] public List<string> Colors { get; set; } = new();
+    [Parameter] public string? Title { get; set; }
+
+    private int? hovered;
+    private decimal total;
+
+    protected override void OnParametersSet()
+    {
+        total = Data.Sum(d => d.Value);
+        if (hovered >= Data.Count)
+            hovered = null;
+    }
+
+    private double Share(SalesPoint point) => total == 0 ? 0 : (double)(point.Value / total) * 100;
+
+    private string ColorAt(int i) => Colors.Count == 0 ? "#512bd4" : Colors[i % Colors.Count];
+}

@@ -1,0 +1,21 @@
+@model Book
+@{
+    ViewData["Title"] = Model.Title;
+}
+
+<h1>@Model.Title</h1>
+
+<div class="card form-card">
+    <p><b>Автор:</b> <a asp-controller="Authors" asp-action="Details" asp-route-id="@Model.AuthorId">@Model.Author.FullName</a></p>
+    <p><b>Год издания:</b> @Model.Year</p>
+    <p><b>Жанр:</b> @Model.Genre</p>
+    <p><b>Страниц:</b> @(Model.Pages?.ToString() ?? "не указано")</p>
+    <p><b>ISBN:</b> @(Model.Isbn ?? "не указан")</p>
+
+    <div class="buttons">
+        <a class="btn" asp-action="Edit" asp-route-id="@Model.Id">Изменить</a>
+        <a class="btn danger-btn" asp-action="Delete" asp-route-id="@Model.Id">Удалить</a>
+    </div>
+</div>
+
+<p><a asp-action="Index">← Все книги</a></p>

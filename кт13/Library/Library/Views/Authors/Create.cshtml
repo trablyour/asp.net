@@ -1,0 +1,17 @@
+@model AuthorFormViewModel
+@{
+    ViewData["Title"] = "Новый автор";
+}
+
+<h1>Новый автор</h1>
+
+<form asp-action="Create" method="post" novalidate>
+    <div class="card form-card">
+        <partial name="_AuthorForm" model="Model" />
+    </div>
+
+    <div class="buttons">
+        <button type="submit">Добавить</button>
+        <a class="btn secondary" asp-action="Index">Отмена</a>
+    </div>
+</form>

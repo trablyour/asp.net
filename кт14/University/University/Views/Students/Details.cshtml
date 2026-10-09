@@ -1,0 +1,56 @@
+@model Student
+@{
+    ViewData["Title"] = Model.FullName;
+    var available = (Microsoft.AspNetCore.Mvc.Rendering.SelectList)ViewBag.AvailableCourses;
+}
+
+<h1>@Model.FullName</h1>
+
+<div class="card">
+    <p><b>Группа:</b> @Model.Group</p>
+    <p><b>Email:</b> @Model.Email</p>
+    <div class="buttons">
+        <a class="btn" asp-action="Edit" asp-route-id="@Model.Id">Изменить</a>
+        <a class="btn danger-btn" asp-action="Delete" asp-route-id="@Model.Id">Удалить</a>
+    </div>
+</div>
+
+<h2>Курсы студента (@Model.Enrollments.Count)</h2>
+
+@if (available.Any())
+{
+    <form asp-action="Enroll" asp-route-id="@Model.Id" method="post" class="inline-add">
+        <select name="courseId" asp-items="available"></select>
+        <button type="submit">Записать на курс</button>
+    </form>
+}
+else
+{
+    <p class="muted">Студент уже записан на все курсы.</p>
+}
+
+@if (Model.Enrollments.Count > 0)
+{
+    <div class="table-wrap">
+        <table class="table">
+            <thead><tr><th>Курс</th><th>Преподаватель</th><th>Дата записи</th><th></th></tr></thead>
+            <tbody>
+                @foreach (var e in Model.Enrollments.OrderBy(e => e.Course.Title))
+                {
+                    <tr>
+                        <td><a asp-controller="Courses" asp-action="Details" asp-route-id="@e.CourseId">@e.Course.Title</a></td>
+                        <td><a asp-controller="Teachers" asp-action="Details" asp-route-id="@e.Course.TeacherId">@e.Course.Teacher.FullName</a></td>
+                        <td>@e.EnrolledAt.ToString("dd.MM.yyyy")</td>
+                        <td class="actions">
+                            <form asp-action="Unenroll" asp-route-id="@Model.Id" asp-route-courseId="@e.CourseId" method="post">
+                                <button type="submit" class="link-danger">Отписать</button>
+                            </form>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}
+
+<p><a asp-action="Index">← Все студенты</a></p>

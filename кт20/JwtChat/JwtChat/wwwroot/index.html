@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>JwtChat</title>
+    <link rel="stylesheet" href="css/site.css" />
+</head>
+<body>
+    <header class="topbar">
+        <span class="brand">🔑 JwtChat</span>
+        <a class="swagger" href="/swagger" target="_blank">Swagger API</a>
+
+        <div class="userbox hidden" id="userbox">
+            <span class="user" id="userName"></span>
+            <span class="role" id="userRole"></span>
+            <span class="expires" title="Время до истечения токена">⏱ <span id="expiresIn">--:--</span></span>
+            <button class="link-btn" id="logoutBtn">Выйти</button>
+        </div>
+    </header>
+
+    <main class="page">
+
+        <!-- ========== вход / регистрация ========== -->
+        <section id="authView" class="auth-card hidden">
+            <div class="tabs">
+                <button class="tab active" data-tab="login">Вход</button>
+                <button class="tab" data-tab="register">Регистрация</button>
+            </div>
+
+            <form id="authForm" novalidate>
+                <label for="username">Логин</label>
+                <input type="text" id="username" autocomplete="username" />
+
+                <label for="password">Пароль</label>
+                <input type="password" id="password" autocomplete="current-password" />
+
+                <div id="confirmBlock" class="hidden">
+                    <label for="confirm">Повторите пароль</label>
+                    <input type="password" id="confirm" autocomplete="new-password" />
+                </div>
+
+                <div class="errors" id="authErrors"></div>
+
+                <button type="submit" class="btn full" id="authSubmit">Войти</button>
+            </form>
+
+            <p class="muted small">
+                После входа сервер выдает JWT токен. Он хранится в браузере и передается
+                в каждом запросе к API и при подключении к хабу SignalR.
+            </p>
+        </section>
+
+        <!-- ========== чат ========== -->
+        <section id="chatView" class="chat hidden">
+            <div class="chat-main">
+                <div class="chat-header">
+                    <h1>Общий чат</h1>
+                    <div class="chat-actions">
+                        <span class="status" id="status">Подключение...</span>
+                        <button class="btn small secondary" id="tokenBtn">Токен</button>
+                        <button class="btn small danger hidden" id="clearBtn">Очистить чат</button>
+                    </div>
+                </div>
+
+                <div class="messages" id="messages"></div>
+                <div class="typing" id="typing"></div>
+
+                <form class="send-form" id="sendForm" autocomplete="off">
+                    <input type="text" id="messageInput" maxlength="500" placeholder="Введите сообщение..." disabled />
+                    <button type="submit" class="btn" id="sendBtn" disabled>Отправить</button>
+                </form>
+                <div class="counter"><span id="counter">0</span> / 500</div>
+            </div>
+
+            <aside class="side">
+                <div class="panel">
+                    <h3>В сети (<span id="onlineCount">0</span>)</h3>
+                    <ul id="users"></ul>
+                </div>
+
+                <div class="panel hidden" id="tokenPanel">
+                    <h3>JWT токен</h3>
+                    <div class="token-raw" id="tokenRaw"></div>
+                    <h4>Payload</h4>
+                    <pre class="token-json" id="tokenPayload"></pre>
+                    <button class="btn small secondary" id="meBtn">GET /api/auth/me</button>
+                    <pre class="token-json hidden" id="meResult"></pre>
+                </div>
+            </aside>
+        </section>
+    </main>
+
+    <script src="lib/signalr/signalr.min.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>

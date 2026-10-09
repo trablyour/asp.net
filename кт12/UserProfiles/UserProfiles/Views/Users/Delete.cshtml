@@ -1,0 +1,24 @@
+@model User
+@{
+    ViewData["Title"] = "Удаление";
+}
+
+<h1>Удаление пользователя</h1>
+
+<div class="card form-card">
+    <p>Удалить пользователя <b>@Model.Username</b> (@Model.Email)?</p>
+
+    @if (Model.Profile != null)
+    {
+        <div class="alert warning">
+            Вместе с пользователем будет удален его профиль (@Model.Profile.FullName), потому что настроено каскадное удаление.
+        </div>
+    }
+
+    <form asp-action="Delete" asp-route-id="@Model.Id" method="post">
+        <div class="buttons">
+            <button type="submit" class="danger-btn">Удалить</button>
+            <a class="btn secondary" asp-action="Details" asp-route-id="@Model.Id">Отмена</a>
+        </div>
+    </form>
+</div>

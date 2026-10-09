@@ -1,0 +1,18 @@
+@model ApplicationUser
+@{
+    ViewData["Title"] = "Удаление";
+}
+
+<h1>Удаление пользователя</h1>
+
+<div class="card narrow">
+    <p>Вы действительно хотите удалить пользователя <b>@Model.FullName</b> (@Model.Email)?</p>
+    <p class="muted">Это действие нельзя отменить.</p>
+
+    <form asp-action="Delete" asp-route-id="@Model.Id" method="post">
+        <div class="buttons">
+            <button type="submit" class="danger-btn">Удалить</button>
+            <a class="btn secondary" asp-action="Index">Отмена</a>
+        </div>
+    </form>
+</div>

@@ -1,0 +1,67 @@
+@page "/products/{Category?}"
+@inherits LocalizedComponentBase
+@inject DataService Data
+@inject NavigationManager Nav
+
+@* необязательный параметр: работает и /products, и /products/phones *@
+
+<div class="chips">
+    <NavLink class="chip" href="products" Match="NavLinkMatch.All">@L["all_categories"]</NavLink>
+    @foreach (var cat in Data.Categories)
+    {
+        <NavLink class="chip" href="@($"products/{cat}")">@L["cat_" + cat]</NavLink>
+    }
+</div>
+
+@if (string.IsNullOrEmpty(Category))
+{
+    <p class="info">@L["showing_all"]</p>
+}
+else if (!Data.CategoryExists(Category))
+{
+    <p class="info warning">@L["unknown_category"]: <code>@Category</code></p>
+}
+else
+{
+    <p class="info">@L["category"]: <b>@L["cat_" + Category.ToLower()]</b> (Category = "@Category")</p>
+}
+
+<div class="grid">
+    @foreach (var p in products)
+    {
+        <div class="item-card">
+            <span class="tag">@L["cat_" + p.Category]</span>
+            <h3>@L.Pick(p.NameRu, p.NameEn)</h3>
+            <p class="muted">@L.Pick(p.DescriptionRu, p.DescriptionEn)</p>
+            <p class="price">@L.Money(p.Price)</p>
+            <button @onclick="() => Open(p.Id)">@L["open"]</button>
+        </div>
+    }
+</div>
+
+<button class="nav-btn" @onclick="GoToCatalog">@L["go_catalog"] →</button>
+
+@code {
+    [Parameter]
+    public string? Category { get; set; }
+
+    private List<Product> products = new();
+
+    // вызывается и при первом открытии, и при смене категории
+    protected override void OnParametersSet()
+    {
+        products = Category != null && !Data.CategoryExists(Category)
+            ? new List<Product>()
+            : Data.GetProducts(Category);
+    }
+
+    private void Open(int id)
+    {
+        Nav.NavigateTo($"/details/{id}");
+    }
+
+    private void GoToCatalog()
+    {
+        Nav.NavigateTo("/catalog/services");
+    }
+}

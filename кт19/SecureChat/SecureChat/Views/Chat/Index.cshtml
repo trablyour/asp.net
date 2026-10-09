@@ -1,0 +1,33 @@
+@{
+    ViewData["Title"] = "Чат";
+}
+
+@* имя текущего пользователя нужно скрипту, чтобы выделять свои сообщения *@
+<div class="chat" id="chat" data-user="@User.Identity!.Name">
+    <section class="chat-main">
+        <div class="chat-header">
+            <h1>Общий чат</h1>
+            <span class="status" id="status">Подключение...</span>
+        </div>
+
+        <div class="messages" id="messages"></div>
+
+        <div class="typing" id="typing"></div>
+
+        <form class="send-form" id="sendForm" autocomplete="off">
+            <input type="text" id="messageInput" maxlength="500" placeholder="Введите сообщение..." disabled />
+            <button type="submit" class="btn" id="sendButton" disabled>Отправить</button>
+        </form>
+        <div class="counter"><span id="counter">0</span> / 500</div>
+    </section>
+
+    <aside class="chat-users">
+        <h3>В сети (<span id="onlineCount">0</span>)</h3>
+        <ul id="users"></ul>
+    </aside>
+</div>
+
+@section Scripts {
+    <script src="~/lib/signalr/signalr.min.js"></script>
+    <script src="~/js/chat.js" asp-append-version="true"></script>
+}

@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - SecureChat</title>
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+</head>
+<body>
+    <header class="topbar">
+        <a class="brand" asp-controller="Home" asp-action="Index">🔒 SecureChat</a>
+
+        <nav>
+            <a asp-controller="Home" asp-action="Index">Главная</a>
+            <a asp-controller="Chat" asp-action="Index">Чат</a>
+        </nav>
+
+        <div class="userbox">
+            @if (User.Identity?.IsAuthenticated == true)
+            {
+                <span class="user">👤 @User.Identity.Name</span>
+                <form asp-controller="Account" asp-action="Logout" method="post">
+                    <button type="submit" class="link-btn">Выйти</button>
+                </form>
+            }
+            else
+            {
+                <a asp-controller="Account" asp-action="Login">Войти</a>
+                <a class="btn small" asp-controller="Account" asp-action="Register">Регистрация</a>
+            }
+        </div>
+    </header>
+
+    <main class="page">
+        @RenderBody()
+    </main>
+
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

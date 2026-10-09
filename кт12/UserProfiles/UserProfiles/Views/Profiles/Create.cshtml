@@ -1,0 +1,19 @@
+@model ProfileFormViewModel
+@{
+    ViewData["Title"] = "Новый профиль";
+}
+
+<h1>Профиль пользователя @Model.Username</h1>
+
+<form asp-action="Create" method="post" novalidate>
+    <input type="hidden" asp-for="UserId" />
+
+    <div class="card form-card">
+        <partial name="_ProfileFields" model="Model" />
+    </div>
+
+    <div class="buttons">
+        <button type="submit">Создать профиль</button>
+        <a class="btn secondary" asp-controller="Users" asp-action="Details" asp-route-id="@Model.UserId">Отмена</a>
+    </div>
+</form>

@@ -1,0 +1,32 @@
+@model StudentFormViewModel
+@{
+    ViewData["Title"] = "Новый студент";
+    var courses = (List<Course>)ViewBag.Courses;
+}
+
+<h1>Новый студент</h1>
+
+<form asp-action="Create" method="post" novalidate>
+    <div class="card form-card">
+        <partial name="_Form" model="Model" />
+
+        @if (courses.Count > 0)
+        {
+            <label>Сразу записать на курсы</label>
+            <div class="checklist">
+                @foreach (var c in courses)
+                {
+                    <label class="checkbox">
+                        <input type="checkbox" name="CourseIds" value="@c.Id" checked="@Model.CourseIds.Contains(c.Id)" />
+                        @c.Title <span class="muted">(@c.Teacher.FullName)</span>
+                    </label>
+                }
+            </div>
+        }
+    </div>
+
+    <div class="buttons">
+        <button type="submit">Добавить</button>
+        <a class="btn secondary" asp-action="Index">Отмена</a>
+    </div>
+</form>

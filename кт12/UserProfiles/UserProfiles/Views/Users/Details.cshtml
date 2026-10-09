@@ -1,0 +1,47 @@
+@model User
+@{
+    ViewData["Title"] = Model.Username;
+}
+
+<h1>@Model.Username</h1>
+
+<div class="columns">
+    <div class="card">
+        <h2>Пользователь</h2>
+        <p><b>Id:</b> @Model.Id</p>
+        <p><b>Логин:</b> @Model.Username</p>
+        <p><b>Email:</b> @Model.Email</p>
+        <p><b>Создан:</b> @Model.CreatedAt.ToString("dd.MM.yyyy HH:mm")</p>
+
+        <div class="buttons">
+            <a class="btn" asp-action="Edit" asp-route-id="@Model.Id">Изменить</a>
+            <a class="btn danger-btn" asp-action="Delete" asp-route-id="@Model.Id">Удалить</a>
+        </div>
+    </div>
+
+    <div class="card">
+        <h2>Профиль</h2>
+
+        @if (Model.Profile == null)
+        {
+            <p class="muted">У пользователя пока нет профиля.</p>
+            <a class="btn" asp-controller="Profiles" asp-action="Create" asp-route-userId="@Model.Id">Создать профиль</a>
+        }
+        else
+        {
+            var p = Model.Profile;
+            <p><b>Имя:</b> @p.FullName</p>
+            <p><b>Дата рождения:</b> @(p.BirthDate?.ToString("dd.MM.yyyy") ?? "не указана")</p>
+            <p><b>Телефон:</b> @(p.Phone ?? "не указан")</p>
+            <p><b>Город:</b> @p.City</p>
+            <p><b>О себе:</b> @(p.Bio ?? "-")</p>
+
+            <div class="buttons">
+                <a class="btn" asp-controller="Profiles" asp-action="Edit" asp-route-userId="@Model.Id">Изменить профиль</a>
+                <a class="btn danger-btn" asp-controller="Profiles" asp-action="Delete" asp-route-userId="@Model.Id">Удалить профиль</a>
+            </div>
+        }
+    </div>
+</div>
+
+<a asp-action="Index">← К списку</a>

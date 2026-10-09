@@ -1,0 +1,31 @@
+@page
+@model FormatModel
+@{
+    ViewData["Title"] = "Форматирование";
+}
+
+<h1>Форматирование текста</h1>
+<p class="hint">Выделите текст и нажмите кнопку</p>
+
+<div class="toolbar">
+    <button type="button" data-tag="b"><b>Ж</b></button>
+    <button type="button" data-tag="i"><i>К</i></button>
+    <button type="button" data-tag="u"><u>Ч</u></button>
+</div>
+
+<form method="post">
+    <textarea asp-for="Text" rows="10"></textarea>
+    <button type="submit">Сохранить</button>
+</form>
+
+@if (Model.Message != null)
+{
+    <p class="msg">@Model.Message</p>
+}
+
+<h3>Как выглядит:</h3>
+<div id="preview" class="preview">@Html.Raw(Model.Text)</div>
+
+@section Scripts {
+    <script src="~/js/format.js" asp-append-version="true"></script>
+}

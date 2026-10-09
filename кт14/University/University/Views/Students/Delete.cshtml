@@ -1,0 +1,31 @@
+@model Student
+@{
+    ViewData["Title"] = "Удаление студента";
+}
+
+<h1>Удаление студента</h1>
+
+<div class="card form-card">
+    <p>Удалить студента <b>@Model.FullName</b> (@Model.Group)?</p>
+
+    @if (Model.Enrollments.Count > 0)
+    {
+        <div class="alert warning">
+            Каскадное удаление: будут удалены записи студента на курсы (@Model.Enrollments.Count).
+            Сами курсы останутся:
+            <ul>
+                @foreach (var e in Model.Enrollments)
+                {
+                    <li>@e.Course.Title</li>
+                }
+            </ul>
+        </div>
+    }
+
+    <form asp-action="Delete" asp-route-id="@Model.Id" method="post">
+        <div class="buttons">
+            <button type="submit" class="danger-btn">Удалить</button>
+            <a class="btn secondary" asp-action="Details" asp-route-id="@Model.Id">Отмена</a>
+        </div>
+    </form>
+</div>

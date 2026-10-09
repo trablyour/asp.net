@@ -1,0 +1,17 @@
+@inherits LocalizedComponentBase
+@inject NavigationManager Nav
+
+<div class="notfound">
+    <div class="code">404</div>
+    <p>@L["notfound_text"]</p>
+    <p><code>@Nav.Uri</code></p>
+    <p class="muted">@L["notfound_hint"]</p>
+    <button @onclick="GoHome">@L["go_home"]</button>
+</div>
+
+@code {
+    private void GoHome()
+    {
+        Nav.NavigateTo("/");
+    }
+}

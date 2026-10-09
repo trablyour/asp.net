@@ -1,0 +1,50 @@
+@inject AdminPanel.Services.SiteSettings Settings
+@{
+    string current = ViewContext.RouteData.Values["controller"]?.ToString() ?? "";
+    string Active(string name) => current == name ? "active" : "";
+}
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Админ-панель</title>
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+</head>
+<body class="admin">
+    <aside class="sidebar">
+        <div class="sidebar-title">
+            Админ-панель
+            <small>@Settings.SiteName</small>
+        </div>
+
+        <nav class="sidebar-nav">
+            <a class="@Active("Dashboard")" asp-area="Admin" asp-controller="Dashboard" asp-action="Index">Главная</a>
+            <a class="@Active("Users")" asp-area="Admin" asp-controller="Users" asp-action="Index">Пользователи</a>
+            <a class="@Active("Settings")" asp-area="Admin" asp-controller="Settings" asp-action="Index">Настройки</a>
+            <a class="@Active("Reports")" asp-area="Admin" asp-controller="Reports" asp-action="Index">Отчеты</a>
+        </nav>
+
+        <div class="sidebar-bottom">
+            <span>@User.Identity?.Name</span>
+            <a asp-area="" asp-controller="Home" asp-action="Index">На сайт</a>
+            <form asp-area="" asp-controller="Account" asp-action="Logout" method="post">
+                <button type="submit" class="link-btn">Выйти</button>
+            </form>
+        </div>
+    </aside>
+
+    <main class="admin-content">
+        @if (TempData["Success"] != null)
+        {
+            <div class="alert success">@TempData["Success"]</div>
+        }
+        @if (TempData["Error"] != null)
+        {
+            <div class="alert error">@TempData["Error"]</div>
+        }
+
+        @RenderBody()
+    </main>
+</body>
+</html>

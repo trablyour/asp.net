@@ -1,0 +1,20 @@
+@model SettingsViewModel
+@{
+    ViewData["Title"] = "Настройки";
+}
+
+<h1>Настройки</h1>
+
+<div class="card narrow">
+    <form asp-action="Index" method="post">
+        <label asp-for="SiteName"></label>
+        <input asp-for="SiteName" />
+        <span asp-validation-for="SiteName" class="field-error"></span>
+
+        <label class="checkbox">
+            <input asp-for="AllowRegistration" /> @Html.DisplayNameFor(m => m.AllowRegistration)
+        </label>
+
+        <button type="submit">Сохранить</button>
+    </form>
+</div>

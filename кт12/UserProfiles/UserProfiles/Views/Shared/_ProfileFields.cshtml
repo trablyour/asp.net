@@ -1,0 +1,33 @@
+@model ProfileFormViewModel
+@* поля профиля, используются в нескольких формах *@
+
+<div class="grid-2">
+    <div>
+        <label asp-for="FirstName"></label>
+        <input asp-for="FirstName" />
+        <span asp-validation-for="FirstName" class="field-error"></span>
+    </div>
+    <div>
+        <label asp-for="LastName"></label>
+        <input asp-for="LastName" />
+        <span asp-validation-for="LastName" class="field-error"></span>
+    </div>
+    <div>
+        <label asp-for="BirthDate"></label>
+        <input asp-for="BirthDate" />
+        <span asp-validation-for="BirthDate" class="field-error"></span>
+    </div>
+    <div>
+        <label asp-for="Phone"></label>
+        <input asp-for="Phone" />
+        <span asp-validation-for="Phone" class="field-error"></span>
+    </div>
+</div>
+
+<label asp-for="City"></label>
+<input asp-for="City" />
+<span asp-validation-for="City" class="field-error"></span>
+
+<label asp-for="Bio"></label>
+<textarea asp-for="Bio" rows="3"></textarea>
+<span asp-validation-for="Bio" class="field-error"></span>

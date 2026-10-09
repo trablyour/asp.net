@@ -1,0 +1,30 @@
+@{
+    ViewData["Title"] = "Главная";
+}
+
+<h1>Система управления учебным процессом</h1>
+
+<div class="stats">
+    <a class="stat" asp-controller="Courses" asp-action="Index">
+        <span class="stat-value">@ViewBag.Courses</span>
+        <span class="stat-label">Курсов</span>
+    </a>
+    <a class="stat" asp-controller="Students" asp-action="Index">
+        <span class="stat-value">@ViewBag.Students</span>
+        <span class="stat-label">Студентов</span>
+    </a>
+    <a class="stat" asp-controller="Teachers" asp-action="Index">
+        <span class="stat-value">@ViewBag.Teachers</span>
+        <span class="stat-label">Преподавателей</span>
+    </a>
+    <div class="stat">
+        <span class="stat-value">@ViewBag.Enrollments</span>
+        <span class="stat-label">Записей на курсы</span>
+    </div>
+</div>
+
+<div class="card">
+    <h2>Связи в базе</h2>
+    <p><b>Преподаватель → Курсы:</b> один ко многим. Удаление преподавателя удаляет его курсы.</p>
+    <p><b>Студенты ↔ Курсы:</b> многие ко многим через таблицу Enrollments. Удаление студента или курса удаляет только записи о зачислении.</p>
+</div>

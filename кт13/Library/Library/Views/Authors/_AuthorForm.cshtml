@@ -1,0 +1,28 @@
+@model AuthorFormViewModel
+
+<div class="grid-2">
+    <div>
+        <label asp-for="FirstName"></label>
+        <input asp-for="FirstName" />
+        <span asp-validation-for="FirstName" class="field-error"></span>
+    </div>
+    <div>
+        <label asp-for="LastName"></label>
+        <input asp-for="LastName" />
+        <span asp-validation-for="LastName" class="field-error"></span>
+    </div>
+    <div>
+        <label asp-for="BirthYear"></label>
+        <input asp-for="BirthYear" />
+        <span asp-validation-for="BirthYear" class="field-error"></span>
+    </div>
+    <div>
+        <label asp-for="Country"></label>
+        <input asp-for="Country" />
+        <span asp-validation-for="Country" class="field-error"></span>
+    </div>
+</div>
+
+<label asp-for="Biography"></label>
+<textarea asp-for="Biography" rows="4"></textarea>
+<span asp-validation-for="Biography" class="field-error"></span>

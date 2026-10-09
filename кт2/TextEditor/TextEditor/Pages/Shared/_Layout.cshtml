@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Редактор</title>
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+</head>
+<body>
+    <nav class="nav">
+        <a asp-page="/Index">1. Редактор</a>
+        <a asp-page="/Format">2. Форматирование</a>
+        <a asp-page="/Tiny">3. TinyMCE</a>
+        <a asp-page="/Images">4. Изображения</a>
+    </nav>
+
+    <main class="content">
+        @RenderBody()
+    </main>
+
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

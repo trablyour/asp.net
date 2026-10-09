@@ -1,0 +1,34 @@
+@{
+    string current = ViewContext.RouteData.Values["controller"]?.ToString() ?? "";
+}
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Библиотека</title>
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+</head>
+<body>
+    <header class="topbar">
+        <a class="brand" asp-controller="Books" asp-action="Index">Библиотека</a>
+        <nav>
+            <a class="@(current == "Books" ? "active" : "")" asp-controller="Books" asp-action="Index">Книги</a>
+            <a class="@(current == "Authors" ? "active" : "")" asp-controller="Authors" asp-action="Index">Авторы</a>
+        </nav>
+    </header>
+
+    <main class="page">
+        @if (TempData["Success"] != null)
+        {
+            <div class="alert success">@TempData["Success"]</div>
+        }
+        @if (TempData["Error"] != null)
+        {
+            <div class="alert error">@TempData["Error"]</div>
+        }
+
+        @RenderBody()
+    </main>
+</body>
+</html>

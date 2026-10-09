@@ -1,0 +1,36 @@
+@{
+    string current = ViewContext.RouteData.Values["controller"]?.ToString() ?? "";
+    string Active(string name) => current == name ? "active" : "";
+}
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Учебный процесс</title>
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+</head>
+<body>
+    <header class="topbar">
+        <a class="brand" asp-controller="Home" asp-action="Index">Учебный процесс</a>
+        <nav>
+            <a class="@Active("Courses")" asp-controller="Courses" asp-action="Index">Курсы</a>
+            <a class="@Active("Students")" asp-controller="Students" asp-action="Index">Студенты</a>
+            <a class="@Active("Teachers")" asp-controller="Teachers" asp-action="Index">Преподаватели</a>
+        </nav>
+    </header>
+
+    <main class="page">
+        @if (TempData["Success"] != null)
+        {
+            <div class="alert success">@TempData["Success"]</div>
+        }
+        @if (TempData["Error"] != null)
+        {
+            <div class="alert error">@TempData["Error"]</div>
+        }
+
+        @RenderBody()
+    </main>
+</body>
+</html>

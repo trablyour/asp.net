@@ -1,0 +1,13 @@
+@model CryptoViewModel
+@{
+    ViewData["Title"] = "Bouncy Castle";
+}
+
+<h1>Bouncy Castle: AES</h1>
+<p class="info">
+    Алгоритм: <b>AES-256-GCM</b>. Для каждого шифрования генерируется случайный nonce (12 байт),
+    он записывается в начало результата. GCM добавляет тег аутентификации (16 байт),
+    поэтому при неверном ключе или измененных данных расшифровка не пройдет.
+</p>
+
+<partial name="_CryptoForm" model="Model" />

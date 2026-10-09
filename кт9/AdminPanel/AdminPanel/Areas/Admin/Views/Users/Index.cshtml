@@ -1,0 +1,49 @@
+@model List<UserListItemViewModel>
+@{
+    ViewData["Title"] = "Пользователи";
+    string? currentUserId = ViewBag.CurrentUserId;
+}
+
+<div class="page-head">
+    <h1>Пользователи</h1>
+    <a class="btn" asp-action="Create">+ Добавить пользователя</a>
+</div>
+
+<div class="table-wrap">
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Имя</th>
+                <th>Email</th>
+                <th>Роль</th>
+                <th>Регистрация</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var user in Model)
+            {
+                <tr>
+                    <td>
+                        @user.FullName
+                        @if (user.Id == currentUserId)
+                        {
+                            <span class="badge">вы</span>
+                        }
+                    </td>
+                    <td>@user.Email</td>
+                    <td>@user.Roles</td>
+                    <td>@user.CreatedAt.ToString("dd.MM.yyyy")</td>
+                    <td class="actions">
+                        <a asp-action="Details" asp-route-id="@user.Id">Просмотр</a>
+                        <a asp-action="Edit" asp-route-id="@user.Id">Изменить</a>
+                        @if (user.Id != currentUserId)
+                        {
+                            <a class="danger" asp-action="Delete" asp-route-id="@user.Id">Удалить</a>
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

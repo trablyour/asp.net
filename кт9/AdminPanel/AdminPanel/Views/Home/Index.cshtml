@@ -1,0 +1,28 @@
+@{
+    ViewData["Title"] = "Главная";
+}
+
+<h1>Добро пожаловать</h1>
+
+@if (User.Identity?.IsAuthenticated == true)
+{
+    <p>Вы вошли как <b>@User.Identity.Name</b>.</p>
+    @if (User.IsInRole(Roles.Admin))
+    {
+        <p>У вас роль администратора, вам доступна <a asp-area="Admin" asp-controller="Dashboard" asp-action="Index">админ-панель</a>.</p>
+    }
+    else
+    {
+        <p>У вас роль обычного пользователя. Админ-панель недоступна.</p>
+    }
+}
+else
+{
+    <p>Чтобы продолжить, <a asp-controller="Account" asp-action="Login">войдите</a> или <a asp-controller="Account" asp-action="Register">зарегистрируйтесь</a>.</p>
+
+    <div class="card narrow">
+        <h3>Тестовые аккаунты</h3>
+        <p>Администратор: <code>admin@site.ru</code> / <code>Admin123</code></p>
+        <p>Пользователь: <code>user@site.ru</code> / <code>User123</code></p>
+    </div>
+}
