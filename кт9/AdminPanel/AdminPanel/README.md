@@ -22,7 +22,8 @@
 
 Главная страница до входа в систему
 
-![Главная страница](screenshots/home1.png)
+![Главная страница](<img width="1075" height="517" alt="image" src="https://github.com/user-attachments/assets/e142ef92-2389-4eed-8654-07af69f3ff81" />
+)
 
 ### Задание 2
 
