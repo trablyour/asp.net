@@ -107,3 +107,5 @@ SecureChat/
 <img width="1232" height="938" alt="пепа4" src="https://github.com/user-attachments/assets/abbbf00d-14d5-42fd-8729-90fa6832617b" />
 
 <img width="1288" height="941" alt="пепа5" src="https://github.com/user-attachments/assets/1d1f2988-ff70-4a83-83d0-257fe050c627" />
+
+<img width="2554" height="905" alt="пепа6" src="https://github.com/user-attachments/assets/f03b7b09-5726-40a8-b296-52ceaf8bc4fc" />
